@@ -62,7 +62,8 @@ public class SolaceJmsAutoConfiguration {
             cf.setUsername(properties.getClientUsername());
             cf.setPassword(properties.getClientPassword());
             cf.setVPN(properties.getMsgVpn());
-            cf.setDirectTransport(properties.isDirectTransport());       
+            cf.setDirectTransport(properties.isDirectTransport());  
+            cf.setClientID(properties.getClientName());
     	    
             return cf;
 	    } catch (Exception ex) {

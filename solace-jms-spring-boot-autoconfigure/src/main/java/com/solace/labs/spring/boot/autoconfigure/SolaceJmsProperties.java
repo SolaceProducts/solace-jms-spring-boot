@@ -49,6 +49,11 @@ public class SolaceJmsProperties {
      */
     private boolean directTransport = false;
     
+    /**
+     * The client name to use when connecting to Solace Message Router. This must be unique. If absent, the API will generate a reasonable client name.
+     */
+    private String clientName;
+    
     
     public String getHost() {
         return host;
@@ -88,6 +93,14 @@ public class SolaceJmsProperties {
 
     public void setDirectTransport(boolean directTransport) {
         this.directTransport = directTransport;
+    }
+
+    public String getClientName() {
+        return clientName;
+    }
+
+    public void setClientName(String clientName) {
+        this.clientName = clientName;
     }
 
     
