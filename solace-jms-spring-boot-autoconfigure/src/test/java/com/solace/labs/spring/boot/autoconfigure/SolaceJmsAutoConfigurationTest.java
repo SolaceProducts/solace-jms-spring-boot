@@ -30,6 +30,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jms.core.JmsTemplate;
 
+import com.solacesystems.jcsmp.JCSMPProperties;
 import com.solacesystems.jms.SolConnectionFactoryImpl;
 
 public class SolaceJmsAutoConfigurationTest {
@@ -52,7 +53,7 @@ public class SolaceJmsAutoConfigurationTest {
 		assertEquals(jmsTemplate.getConnectionFactory(), connectionFactory);
         assertEquals("tcp://localhost", connectionFactory.getHost());
         assertEquals("default", connectionFactory.getVPN());
-        assertNull(connectionFactory.getUsername());
+        assertEquals("spring-default-client-username", connectionFactory.getUsername());
         assertNull(connectionFactory.getPassword());
         assertFalse(connectionFactory.getDirectTransport());
 	}

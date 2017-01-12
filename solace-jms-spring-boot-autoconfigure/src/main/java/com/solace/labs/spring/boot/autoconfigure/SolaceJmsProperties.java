@@ -1,6 +1,3 @@
-
-package com.solace.labs.spring.boot.autoconfigure;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -19,6 +16,9 @@ package com.solace.labs.spring.boot.autoconfigure;
  * specific language governing permissions and limitations
  * under the License.
  */
+
+package com.solace.labs.spring.boot.autoconfigure;
+
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties("solace.jms")
