@@ -30,7 +30,6 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jms.core.JmsTemplate;
 
-import com.solacesystems.jcsmp.JCSMPProperties;
 import com.solacesystems.jms.SolConnectionFactoryImpl;
 
 public class SolaceJmsAutoConfigurationTest {
