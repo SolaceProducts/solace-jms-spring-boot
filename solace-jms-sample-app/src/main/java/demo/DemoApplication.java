@@ -12,46 +12,38 @@ import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-@SpringBootApplication 
+@SpringBootApplication
 public class DemoApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(DemoApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(DemoApplication.class, args);
+    }
 
+    @Service
+    static class MessageProducer implements CommandLineRunner {
 
-	@Service
-	static class MessageProducer implements CommandLineRunner {
+        private static final Logger logger = LoggerFactory.getLogger(MessageProducer.class);
 
-		private static final Logger logger = LoggerFactory.getLogger(MessageProducer.class);
+        @Autowired
+        private JmsTemplate jmsTemplate;
 
-		private final JmsTemplate jmsTemplate;
+        @Override
+        public void run(String... strings) throws Exception {
+            String msg = "Hello World";
+            logger.info("============= Sending " + msg);
+            this.jmsTemplate.convertAndSend("testQueue", msg);
+        }
+    }
 
-		@Autowired
-		public MessageProducer(JmsTemplate jmsTemplate) {
-			this.jmsTemplate = jmsTemplate;
-		}
+    @Component
+    static class MessageHandler {
 
-		@Override
-		public void run(String... strings) throws Exception {
-			process("Hello World");
-		}
+        private static final Logger logger = LoggerFactory.getLogger(MessageHandler.class);
 
-		public void process(String msg) {
-			logger.info("============= Sending " + msg);
-			this.jmsTemplate.convertAndSend("testQueue", msg);
-		}
-	}
-
-	@Component
-	static class MessageHandler {
-
-		private static final Logger logger = LoggerFactory.getLogger(MessageHandler.class);
-
-		@JmsListener(destination = "testQueue")
-		public void processMsg(String msg) {
-			logger.info("============= Received " + msg);
-		}
-	}
+        @JmsListener(destination = "testQueue")
+        public void processMsg(String msg) {
+            logger.info("============= Received " + msg);
+        }
+    }
 
 }
