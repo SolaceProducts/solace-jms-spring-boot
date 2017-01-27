@@ -40,7 +40,7 @@ Here is how to include the spring boot starter in your project using Gradle and 
 
 ```
 // Solace Java API & auto-configuration
-compile("com.solace.labs.spring.boot:solace-jms-spring-boot-starter:0.1.0")
+compile("com.solace.labs.spring.boot:solace-jms-spring-boot-starter:0.1.2")
 ```
 
 #### Using it with Maven
@@ -50,7 +50,7 @@ compile("com.solace.labs.spring.boot:solace-jms-spring-boot-starter:0.1.0")
 <dependency>
 	<groupId>com.solace.labs.spring.boot</groupId>
 	<artifactId>solace-jms-spring-boot-starter</artifactId>
-	<version>0.1.0</version>
+	<version>0.1.2</version>
 </dependency>
 ```
 

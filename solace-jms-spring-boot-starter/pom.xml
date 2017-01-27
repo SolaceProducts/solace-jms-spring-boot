@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	
+
 	<parent>
-        <groupId>com.solace.labs.spring.boot</groupId>
-        <artifactId>solace-jms-spring-boot-parent</artifactId>
-        <version>0.1.2-SNAPSHOT</version>
-        <relativePath>../pom.xml</relativePath>
-    </parent>
-    
+		<groupId>com.solace.labs.spring.boot</groupId>
+		<artifactId>solace-jms-spring-boot-parent</artifactId>
+		<version>0.1.2-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+
 	<artifactId>solace-jms-spring-boot-starter</artifactId>
 	<packaging>jar</packaging>
 	<name>Solace JMS Spring Boot Starter</name>
 	<description>Starter for JMS messaging using Solace</description>
 	<url>https://github.com/SolaceLabs/solace-jms-spring-boot</url>
-	
+
 	<dependencies>
 		<dependency>
 			<groupId>com.solace.labs.spring.boot</groupId>
@@ -26,9 +27,9 @@
 			<artifactId>spring-jms</artifactId>
 		</dependency>
 		<dependency>
-		    <groupId>com.solacesystems</groupId>
-		    <artifactId>sol-jms</artifactId>
-		    <version>10.0.0</version>
+			<groupId>com.solacesystems</groupId>
+			<artifactId>sol-jms</artifactId>
+			<version>10.0.0</version>
 		</dependency>
 	</dependencies>
 </project>
