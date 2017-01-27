@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.solace.labs.spring.boot</groupId>
 	<artifactId>solace-jms-spring-boot-parent</artifactId>
-	<version>0.1.1-SNAPSHOT</version>
+	<version>0.1.2-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>Solace JMS API Spring Boot Starter and AutoConfiguration</name>
     <description>Parent POM for Solace JMS API Spring Boot Starter and AutoConfiguration </description>
