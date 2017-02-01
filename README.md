@@ -30,7 +30,7 @@ See the associated `solace-jms-sample-app` for an example of how this is all put
 
 ### Updating your build
 
-This releases from this project are hosted in [Maven Central (Link TODO)](link/todo)
+This releases from this project are hosted in [Maven Central](https://mvnrepository.com/artifact/com.solace.labs.spring.boot/solace-jms-spring-boot-starter)
 
 The easiest way to get started is to include the `solace-jms-spring-boot-starter` in your application. For an examples see the [JMS Sample App](https://github.com/SolaceLabs/solace-jms-spring-boot/tree/master/solace-jms-sample-app) in this project.
 
