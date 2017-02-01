@@ -25,8 +25,8 @@ The artifacts are published to Maven Central so it should be familiar and intuit
 
 See the associated `solace-jms-sample-app` for an example of how this is all put together in a simple application. To use Solace JMS you need to do these steps:
 
-1) Update your build
-2) Configure your `application.properties`.
+1. Update your build
+2. Configure your `application.properties`.
 
 ### Updating your build
 
@@ -39,14 +39,12 @@ Here is how to include the spring boot starter in your project using Gradle and 
 #### Using it with Gradle
 
 ```
-// Solace Java API & auto-configuration
 compile("com.solace.labs.spring.boot:solace-jms-spring-boot-starter:0.1.2")
 ```
 
 #### Using it with Maven
 
 ```
-<!-- Solace Java API & auto-configuration-->
 <dependency>
 	<groupId>com.solace.labs.spring.boot</groupId>
 	<artifactId>solace-jms-spring-boot-starter</artifactId>
