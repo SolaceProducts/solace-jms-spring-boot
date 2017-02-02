@@ -79,6 +79,8 @@ This project depends on maven for building. To build the jar locally, check out 
 
 This will build the auto-configuration jar and associated sample.
 
+Note: As currently setup, the build requires Java 1.8. If you want to use another older version of Java adjust the build accordingly.
+
 ## Contributing
 
 Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
