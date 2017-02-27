@@ -7,7 +7,7 @@ For a high level introduction and explanation, you can also refer to the followi
 ## Contents
 
 * [Overview](#overview)
-* [Using Auto-Configurion in your App](#using-auto-configuration-in-your-app)
+* [Using Auto-Configuration in your App](#using-auto-configuration-in-your-app)
 * [Building the Project Yourself](#building-the-project-yourself)
 * [Contributing](#contributing)
 * [Authors](#authors)
