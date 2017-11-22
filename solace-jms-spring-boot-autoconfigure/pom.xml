@@ -26,6 +26,11 @@
 			<artifactId>spring-boot-starter-logging</artifactId>
 		</dependency>
 		<dependency>
+		    <groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-jms</artifactId>
 			<optional>true</optional>
@@ -33,7 +38,7 @@
 		<dependency>
 			<groupId>com.solacesystems</groupId>
 			<artifactId>sol-jms</artifactId>
-			<version>10.0.1</version>
+			<version>[10,)</version>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
@@ -41,11 +46,26 @@
 			<artifactId>spring-boot-configuration-processor</artifactId>
 			<optional>true</optional>
 		</dependency>
-
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-core</artifactId>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+		  <groupId>com.solace.labs.cloud.cloudfoundry</groupId>
+		  <artifactId>solace-labs-spring-cloud-connector</artifactId>
+		  <version>1.3.0-SNAPSHOT</version>		  
+		</dependency>
+		<dependency>
+		  <groupId>com.github.stefanbirkner</groupId>
+		  <artifactId>system-rules</artifactId>
+		  <version>1.16.0</version>
+		  <scope>test</scope>
 		</dependency>
 	</dependencies>
 </project>
