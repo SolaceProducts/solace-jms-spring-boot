@@ -32,23 +32,23 @@ See the associated `solace-jms-sample-app` for an example of how this is all put
 
 ### Updating your build
 
-This releases from this project are hosted in [Maven Central](https://mvnrepository.com/artifact/com.solace.labs.spring.boot/solace-jms-spring-boot-starter)
+This releases from this project are hosted in [Maven Central](https://mvnrepository.com/artifact/com.solace.spring.boot/solace-jms-spring-boot-starter)
 
-The easiest way to get started is to include the `solace-jms-spring-boot-starter` in your application. For an examples see the [JMS Sample App](https://github.com/SolaceLabs/solace-jms-spring-boot/tree/master/solace-jms-sample-app) in this project.
+The easiest way to get started is to include the `solace-jms-spring-boot-starter` in your application. For an examples see the [JMS Sample App](https://github.com/SolaceProjects/solace-jms-spring-boot/tree/master/solace-jms-sample-app) in this project.
 
 Here is how to include the spring boot starter in your project using Gradle and Maven.
 
 #### Using it with Gradle
 
 ```
-compile("com.solace.labs.spring.boot:solace-jms-spring-boot-starter:0.1.2")
+compile("com.solace.spring.boot:solace-jms-spring-boot-starter:0.1.2")
 ```
 
 #### Using it with Maven
 
 ```
 <dependency>
-	<groupId>com.solace.labs.spring.boot</groupId>
+	<groupId>com.solace.spring.boot</groupId>
 	<artifactId>solace-jms-spring-boot-starter</artifactId>
 	<version>0.1.2</version>
 </dependency>
@@ -69,13 +69,13 @@ solace.jms.directTransport
 
 Where reasonable, sensible defaults are always chosen. So a developer using a Solace VMR and wishing to use the default message-vpn must only set the `solace.jms.host`. 
 
-See [`SolaceJmsProperties`](https://github.com/SolaceLabs/solace-jms-spring-boot/blob/master/solace-jms-spring-boot-autoconfigure/src/main/java/com/solace/labs/spring/boot/autoconfigure/SolaceJmsProperties.java) for the most up to date list. Over time the list of supported properties will continue to evolve and grow. If you're missing a particular property, you can easily submit a pull request or raise an issue and we'll add it.
+See [`SolaceJmsProperties`](https://github.com/SolaceProjects/solace-jms-spring-boot/blob/master/solace-jms-spring-boot-autoconfigure/src/main/java/com/solace/spring/boot/autoconfigure/SolaceJmsProperties.java) for the most up to date list. Over time the list of supported properties will continue to evolve and grow. If you're missing a particular property, you can easily submit a pull request or raise an issue and we'll add it.
 
 ## Building the Project Yourself 
 
 This project depends on maven for building. To build the jar locally, check out the project and build from source by doing the following:
 
-    git clone https://github.com/SolaceLabs/solace-jms-spring-boot.git
+    git clone https://github.com/SolaceProjects/solace-jms-spring-boot.git
     cd solace-jms-spring-boot
     mvn package
 
@@ -95,7 +95,7 @@ Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduc
 
 ## Authors
 
-See the list of [contributors](https://github.com/SolaceLabs/solace-jms-spring-boot/graphs/contributors) who participated in this project.
+See the list of [contributors](https://github.com/SolaceProjects/solace-jms-spring-boot/graphs/contributors) who participated in this project.
 
 ## License
 

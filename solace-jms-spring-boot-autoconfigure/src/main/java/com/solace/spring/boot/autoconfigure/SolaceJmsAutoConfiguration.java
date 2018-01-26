@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package com.solace.labs.spring.boot.autoconfigure;
+package com.solace.spring.boot.autoconfigure;
 
 import java.util.Hashtable;
 
@@ -25,6 +25,7 @@ import javax.jms.ConnectionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -39,6 +40,7 @@ import com.solacesystems.jms.property.JMSProperties;
 
 @Configuration
 @AutoConfigureBefore(JmsAutoConfiguration.class)
+@AutoConfigureAfter({SolaceJmsAutoCloudConfiguration.class, SolaceJndiAutoConfiguration.class})
 @ConditionalOnClass({ ConnectionFactory.class, SolConnectionFactory.class })
 @ConditionalOnMissingBean(ConnectionFactory.class)
 @EnableConfigurationProperties(SolaceJmsProperties.class)
@@ -53,16 +55,17 @@ public class SolaceJmsAutoConfiguration {
     public SolConnectionFactoryImpl connectionFactory() {
 
         try {
+            Hashtable<String, String> ht = new Hashtable<String, String>();
+            ht.putAll(properties.getApiProperties());
             JMSProperties props;
-            props = new JMSProperties((Hashtable<?, ?>) null);
+            props = new JMSProperties((Hashtable<?, ?>) ht);
             props.initialize();
             SolConnectionFactoryImpl cf = new SolConnectionFactoryImpl(props);
             cf.setHost(properties.getHost());
+            cf.setVPN(properties.getMsgVpn());
             cf.setUsername(properties.getClientUsername());
             cf.setPassword(properties.getClientPassword());
-            cf.setVPN(properties.getMsgVpn());
             cf.setDirectTransport(properties.isDirectTransport());
-            cf.setClientID(properties.getClientName());
 
             return cf;
         } catch (Exception ex) {
