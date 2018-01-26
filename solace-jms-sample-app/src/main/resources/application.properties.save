@@ -1,0 +1,12 @@
+# TODO: remove specifics before publishing
+#
+# Solace JMS connection properties
+solace.jms.host=smfs://mr-dnkn9xyfl.messaging.datago.io:20386
+solace.jms.msgVpn=msgvpn-dnknawibl
+solace.jms.clientUsername=datago-client-username
+solace.jms.clientPassword=okn0b1kugegeofiplmvg1rndj9
+# Example of using a Solace JMS API property
+solace.jms.apiProperties.Solace_JMS_SSL_TrustStore=C:/PROGRA~1/Java/jdk1.8.0_152/jre/lib/security/cacerts
+# Example of picking up an environment/config property
+solace.jms.demoQueueName=tutorial/queue
+#debug=true

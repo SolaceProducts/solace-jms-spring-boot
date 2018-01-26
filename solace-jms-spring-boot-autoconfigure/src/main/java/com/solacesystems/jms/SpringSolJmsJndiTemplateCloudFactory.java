@@ -21,14 +21,15 @@ package com.solacesystems.jms;
 
 import java.util.List;
 
-import com.solace.labs.spring.cloud.core.SolaceMessagingInfo;
-import com.solacesystems.jms.SolConnectionFactory;
+import org.springframework.jndi.JndiTemplate;
+
+import com.solace.spring.cloud.core.SolaceMessagingInfo;
 
 /**
- * A Factory for SolConnectionFactory to Support Cloud Environments having
+ * A Factory for JndiTemplate to Support Cloud Environments having
  * multiple solace-messaging services.
  */
-public interface SpringSolConnectionFactoryCloudFactory {
+public interface SpringSolJmsJndiTemplateCloudFactory {
 
 	/**
 	 * Lists All Cloud Environment detected Solace Messaging services
@@ -44,7 +45,7 @@ public interface SpringSolConnectionFactoryCloudFactory {
 	 * @return SolConnectionFactory based on the first detected
 	 *         SolaceMessagingInfo
 	 */
-	public SolConnectionFactory getSolConnectionFactory();
+	public JndiTemplate getJndiTemplate();
 
 	/**
 	 * Returns a SolConnectionFactory based on the given SolaceMessagingInfo
@@ -52,6 +53,6 @@ public interface SpringSolConnectionFactoryCloudFactory {
 	 * @param solaceMessagingInfo
 	 * @return SolConnectionFactory based on the given SolaceMessagingInfo
 	 */
-	public SolConnectionFactory getSolConnectionFactory(SolaceMessagingInfo solaceMessagingInfo);
+	public JndiTemplate getJndiTemplate(SolaceMessagingInfo solaceMessagingInfo);
 
 }

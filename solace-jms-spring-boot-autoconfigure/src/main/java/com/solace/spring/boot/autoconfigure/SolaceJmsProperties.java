@@ -17,14 +17,21 @@
  * under the License.
  */
 
-package com.solace.labs.spring.boot.autoconfigure;
+package com.solace.spring.boot.autoconfigure;
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
 @ConfigurationProperties("solace.jms")
 public class SolaceJmsProperties {
+	
+	@NestedConfigurationProperty
+	private final Map<String,String> apiProperties = new ConcurrentHashMap<>();
 
-     /**
+	/**
      * Solace Message Router Host address. Port is optional and intelligently defaulted by the Solace JMS API.
      */
     private String host = "localhost";
@@ -103,6 +110,7 @@ public class SolaceJmsProperties {
         this.clientName = clientName;
     }
 
-    
-
+    public Map<String,String> getApiProperties() {
+		return apiProperties;
+	}
 }

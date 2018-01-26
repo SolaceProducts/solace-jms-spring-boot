@@ -9,10 +9,10 @@
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
-	<artifactId>solace-jms-sample-app</artifactId>
+	<artifactId>solace-jms-sample-app-jndi</artifactId>
 	<packaging>jar</packaging>
 
-	<name>Spring Boot AutoConfiguration :: JMS Sample App</name>
+	<name>Spring Boot AutoConfiguration :: JMS Sample App using JNDI</name>
 	<description>Sample Application using the custom auto-config</description>
 	<url>https://github.com/SolaceProducts/solace-jms-spring-boot</url>
 

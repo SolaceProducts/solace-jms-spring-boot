@@ -1,4 +1,4 @@
-package demo;
+package jmsdemo;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -15,11 +15,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ErrorHandler;
 
 @EnableJms
-public class DemoConfiguration {
+public class ConsumerConfiguration {
 
-    private static final Logger logger = LoggerFactory.getLogger(DemoConfiguration.class);
+    private static final Logger logger = LoggerFactory.getLogger(ConsumerConfiguration.class);
 
-    // In order to handle JMS errors we need to instantiate the ConnectionFactory ourselves and set the error handler
+    // Example configuration of the ConnectionFactory: we instantiate it here ourselves and set an error handler
     @Bean
     public DefaultJmsListenerContainerFactory cFactory(ConnectionFactory connectionFactory, DemoErrorHandler errorHandler) {
         DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
