@@ -22,9 +22,4 @@ public class ProducerConfiguration {
 		CachingConnectionFactory ccf = new CachingConnectionFactory(connectionFactory);
 		return new JmsTemplate(ccf);
 	}
-
-	@Bean
-	public MessageProducer messageProducer() {
-	    return new MessageProducer();
-	}
 }

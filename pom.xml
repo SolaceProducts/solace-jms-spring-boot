@@ -7,7 +7,7 @@
 	<packaging>pom</packaging>
 	<name>Solace JMS API Spring Boot Starter and AutoConfiguration</name>
 	<description>Parent POM for Solace JMS API Spring Boot Starter and AutoConfiguration </description>
-	<url>https://github.com/SolaceProjects/solace-jms-spring-boot</url>
+	<url>https://github.com/SolaceProducts/solace-jms-spring-boot</url>
 
 	<licenses>
 		<license>
@@ -26,9 +26,9 @@
 	</developers>
 
 	<scm>
-		<url>https://github.com/SolaceProjects/solace-jms-spring-boot.git</url>
-		<connection>scm:git:git://github.com/SolaceProjects/solace-jms-spring-boot.git</connection>
-		<developerConnection>scm:git:git@github.com:SolaceProjects/solace-jms-spring-boot.git</developerConnection>
+		<url>https://github.com/SolaceProducts/solace-jms-spring-boot.git</url>
+		<connection>scm:git:git://github.com/SolaceProducts/solace-jms-spring-boot.git</connection>
+		<developerConnection>scm:git:git@github.com:SolaceProducts/solace-jms-spring-boot.git</developerConnection>
 		<tag>HEAD</tag>
 	</scm>
 
