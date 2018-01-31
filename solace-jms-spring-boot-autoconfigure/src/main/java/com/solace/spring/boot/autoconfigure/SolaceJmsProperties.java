@@ -49,7 +49,7 @@ public class SolaceJmsProperties {
     /**
      * Solace Message Router Client Password
      */
-    private String clientPassword;
+    private String clientPassword = "";
     
     /**
      * A flag to control whether or not to enable the Solace direct transport JMS feature. Enabling this feature allows for higher performance but limits the JMS features that are supported.

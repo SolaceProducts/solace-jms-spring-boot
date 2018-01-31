@@ -8,8 +8,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.jms.connection.CachingConnectionFactory;
 import org.springframework.jms.core.JmsTemplate;
 
-import jmsdemo.DemoApplication.MessageProducer;
-
 @Configuration
 public class ProducerConfiguration {
 
