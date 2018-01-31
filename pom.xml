@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.solace.labs.spring.boot</groupId>
+	<groupId>com.solace.spring.boot</groupId>
 	<artifactId>solace-jms-spring-boot-parent</artifactId>
-	<version>0.1.5-SNAPSHOT</version>
+	<version>0.2.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>Solace JMS API Spring Boot Starter and AutoConfiguration</name>
 	<description>Parent POM for Solace JMS API Spring Boot Starter and AutoConfiguration </description>
-	<url>https://github.com/SolaceLabs/solace-jms-spring-boot</url>
+	<url>https://github.com/SolaceProducts/solace-jms-spring-boot</url>
 
 	<licenses>
 		<license>
@@ -26,9 +26,9 @@
 	</developers>
 
 	<scm>
-		<url>https://github.com/SolaceLabs/solace-jms-spring-boot.git</url>
-		<connection>scm:git:git://github.com/SolaceLabs/solace-jms-spring-boot.git</connection>
-		<developerConnection>scm:git:git@github.com:SolaceLabs/solace-jms-spring-boot.git</developerConnection>
+		<url>https://github.com/SolaceProducts/solace-jms-spring-boot.git</url>
+		<connection>scm:git:git://github.com/SolaceProducts/solace-jms-spring-boot.git</connection>
+		<developerConnection>scm:git:git@github.com:SolaceProducts/solace-jms-spring-boot.git</developerConnection>
 		<tag>HEAD</tag>
 	</scm>
 
@@ -182,6 +182,7 @@
 			</activation>
 			<modules>
 				<module>solace-jms-sample-app</module>
+				<module>solace-jms-sample-app-jndi</module>
 				<module>solace-jms-spring-boot-autoconfigure</module>
 				<module>solace-jms-spring-boot-starter</module>
 			</modules>

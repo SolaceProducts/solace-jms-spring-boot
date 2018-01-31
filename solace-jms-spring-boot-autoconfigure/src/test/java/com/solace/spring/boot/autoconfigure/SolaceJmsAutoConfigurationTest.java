@@ -16,12 +16,10 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package com.solace.labs.spring.boot.autoconfigure;
+package com.solace.spring.boot.autoconfigure;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-
 import org.junit.After;
 import org.junit.Test;
 import org.springframework.boot.autoconfigure.jms.JmsAutoConfiguration;
@@ -30,6 +28,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jms.core.JmsTemplate;
 
+import com.solace.spring.boot.autoconfigure.SolaceJmsAutoConfiguration;
 import com.solacesystems.jms.SolConnectionFactoryImpl;
 
 public class SolaceJmsAutoConfigurationTest {
@@ -53,7 +52,7 @@ public class SolaceJmsAutoConfigurationTest {
         assertEquals("tcp://localhost", connectionFactory.getHost());
         assertEquals("default", connectionFactory.getVPN());
         assertEquals("spring-default-client-username", connectionFactory.getUsername());
-        assertNull(connectionFactory.getPassword());
+        assertEquals("", connectionFactory.getPassword());
         assertFalse(connectionFactory.getDirectTransport());
 	}
 

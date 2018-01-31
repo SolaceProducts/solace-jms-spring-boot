@@ -1,4 +1,4 @@
-package demo;
+package jmsdemo;
 
 import java.util.Iterator;
 
