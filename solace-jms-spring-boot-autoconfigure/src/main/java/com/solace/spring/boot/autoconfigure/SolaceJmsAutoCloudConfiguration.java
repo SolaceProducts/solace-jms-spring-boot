@@ -84,7 +84,7 @@ public class SolaceJmsAutoCloudConfiguration extends SpringSolJmsConfCloudFactor
 			else
 				cf.setPassword(properties.getClientPassword());
 
-            cf.setDirectTransport(false);
+            cf.setDirectTransport(properties.isDirectTransport());
 
 			return cf;
 		} catch (Exception ex) {
