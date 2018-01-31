@@ -82,7 +82,7 @@ solace.jms.clientName
 solace.jms.directTransport 
 ```
 
-Where reasonable, sensible defaults are always chosen. So a developer using a Solace VMR and wishing to use the default message-vpn must only set the `solace.jms.host`. When using JNDI, the configured connection factory properties on the Solace message router are taken as a starting point, including the `directTransport` configuration.
+Where reasonable, sensible defaults are always chosen. So a developer using a Solace VMR and wishing to use the default message-vpn must only set the `solace.jms.host`. When using JNDI, the configured connection factory properties on the Solace message router are taken as a starting point, including the `clientName` and `directTransport` configurations.
 
 See [`SolaceJmsProperties`](https://github.com/SolaceProducts/solace-jms-spring-boot/blob/master/solace-jms-spring-boot-autoconfigure/src/main/java/com/solace/spring/boot/autoconfigure/SolaceJmsProperties.java) for the most up to date list of directly configurable properties.
 
@@ -113,7 +113,7 @@ The simplest way to run the sample is from the project root folder using maven. 
 	cd solace-jms-sample-app
     mvn spring-boot:run
 
-    or
+or
 
 	cd solace-jms-sample-app-jndi
     mvn spring-boot:run
