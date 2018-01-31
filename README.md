@@ -25,7 +25,7 @@ The artifacts are published to Maven Central so it should be familiar and intuit
     
 ## Using Auto-Configuration in your App
 
-Spring Boot Auto-Configuration for the Solace JMS supports both of programmatic creation or JNDI lookup of JMS objects. To learn more about JNDI refer to the [Obtaining JMS objects using JNDI tutorial](https://solacesamples.github.io/solace-samples-jms/using-jndi/).
+Spring Boot Auto-Configuration for the Solace JMS supports both programmatic creation or JNDI lookup of JMS objects. To learn more about JNDI refer to the [Obtaining JMS objects using JNDI tutorial](https://solacesamples.github.io/solace-samples-jms/using-jndi/).
 
 #### Programmatic creation of JMS objects
 
