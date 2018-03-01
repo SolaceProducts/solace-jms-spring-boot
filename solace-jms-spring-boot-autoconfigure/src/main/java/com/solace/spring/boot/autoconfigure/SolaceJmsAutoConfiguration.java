@@ -98,7 +98,8 @@ public class SolaceJmsAutoConfiguration {
         }
     }
 
-    private SolaceServiceCredentials findFirstSolaceServiceCredentials() {
+    @Bean
+    public SolaceServiceCredentials findFirstSolaceServiceCredentials() {
         SolaceServiceCredentials credentials = solaceServicesInfoLoader.getSolaceServiceInfo();
         return credentials != null ? credentials : new SolaceServiceCredentials();
     }

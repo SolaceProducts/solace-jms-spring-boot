@@ -24,6 +24,8 @@ import javax.jms.ConnectionFactory;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 
+import com.solace.services.loader.SolaceCredentialsLoader;
+import com.solace.services.loader.model.SolaceServiceCredentials;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,16 +53,34 @@ public class SolaceJndiAutoConfiguration {
 
     @Autowired
     private SolaceJmsProperties properties;
+    private SolaceCredentialsLoader solaceServicesInfoLoader = new SolaceCredentialsLoader();
 
     @Bean
     public JndiTemplate jndiTemplate() {
+        return jndiTemplate(findFirstSolaceServiceCredentials());
+    }
+
+    public JndiTemplate jndiTemplate(SolaceServiceCredentials solaceServiceCredentials) {
         try {
             Properties env = new Properties();
             env.putAll(properties.getApiProperties());
             env.put(InitialContext.INITIAL_CONTEXT_FACTORY, "com.solacesystems.jndi.SolJNDIInitialContextFactory");
-            env.put(InitialContext.PROVIDER_URL, properties.getHost());
-            env.put(Context.SECURITY_PRINCIPAL, properties.getClientUsername() + '@' + properties.getMsgVpn());
-            env.put(Context.SECURITY_CREDENTIALS, properties.getClientPassword());
+
+            if (solaceServiceCredentials.getJmsJndiUris() != null && !solaceServiceCredentials.getJmsJndiUris().isEmpty())
+                env.put(InitialContext.PROVIDER_URL, solaceServiceCredentials.getJmsJndiUris().get(0));
+            else
+                env.put(InitialContext.PROVIDER_URL, properties.getHost());
+
+            if (solaceServiceCredentials.getClientUsername() != null && solaceServiceCredentials.getMsgVpnName() != null)
+                env.put(Context.SECURITY_PRINCIPAL,
+                        solaceServiceCredentials.getClientUsername() + '@' + solaceServiceCredentials.getMsgVpnName());
+            else
+                env.put(Context.SECURITY_PRINCIPAL, properties.getClientUsername() + '@' + properties.getMsgVpn());
+
+            if (solaceServiceCredentials.getClientPassword() != null)
+                env.put(Context.SECURITY_CREDENTIALS, solaceServiceCredentials.getClientPassword());
+            else
+                env.put(Context.SECURITY_CREDENTIALS, properties.getClientPassword());
 
             JndiTemplate jndiTemplate = new JndiTemplate();
             jndiTemplate.setEnvironment(env);
@@ -72,6 +92,12 @@ public class SolaceJndiAutoConfiguration {
             throw new IllegalStateException("Unable to create Solace "
                     + "JNDI Initial Context, ensure that the sol-jms-<version>.jar " + "is the classpath", ex);
         }
+    }
+
+    @Bean
+    public SolaceServiceCredentials findFirstSolaceServiceCredentials() {
+        SolaceServiceCredentials credentials = solaceServicesInfoLoader.getSolaceServiceInfo();
+        return credentials != null ? credentials : new SolaceServiceCredentials();
     }
 
 }
