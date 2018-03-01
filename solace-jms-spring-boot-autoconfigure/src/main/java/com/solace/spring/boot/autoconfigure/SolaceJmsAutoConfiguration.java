@@ -22,6 +22,8 @@ import java.util.Hashtable;
 
 import javax.jms.ConnectionFactory;
 
+import com.solace.services.loader.SolaceCredentialsLoader;
+import com.solace.services.loader.model.SolaceServiceCredentials;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,21 +52,40 @@ public class SolaceJmsAutoConfiguration {
 
     @Autowired
     private SolaceJmsProperties properties;
+    private SolaceCredentialsLoader solaceServicesInfoLoader = new SolaceCredentialsLoader();
 
     @Bean
     public SolConnectionFactoryImpl connectionFactory() {
+        return connectionFactory(findFirstSolaceServiceCredentials());
+    }
 
+    public SolConnectionFactoryImpl connectionFactory(SolaceServiceCredentials solaceServiceCredentials) {
         try {
-            Hashtable<String, String> ht = new Hashtable<String, String>();
-            ht.putAll(properties.getApiProperties());
-            JMSProperties props;
-            props = new JMSProperties((Hashtable<?, ?>) ht);
+            Hashtable<String, String> ht = new Hashtable<>(properties.getApiProperties());
+            JMSProperties props = new JMSProperties(ht);
             props.initialize();
             SolConnectionFactoryImpl cf = new SolConnectionFactoryImpl(props);
-            cf.setHost(properties.getHost());
-            cf.setVPN(properties.getMsgVpn());
-            cf.setUsername(properties.getClientUsername());
-            cf.setPassword(properties.getClientPassword());
+
+            if (solaceServiceCredentials.getSmfHosts() != null && !solaceServiceCredentials.getSmfHosts().isEmpty())
+                cf.setHost(solaceServiceCredentials.getSmfHosts().get(0));
+            else
+                cf.setHost(properties.getHost());
+
+            if (solaceServiceCredentials.getMsgVpnName() != null)
+                cf.setVPN(solaceServiceCredentials.getMsgVpnName());
+            else
+                cf.setVPN(properties.getMsgVpn());
+
+            if (solaceServiceCredentials.getClientUsername() != null)
+                cf.setUsername(solaceServiceCredentials.getClientUsername());
+            else
+                cf.setUsername(properties.getClientUsername());
+
+            if (solaceServiceCredentials.getClientPassword() != null)
+                cf.setPassword(solaceServiceCredentials.getClientPassword());
+            else
+                cf.setPassword(properties.getClientPassword());
+
             cf.setDirectTransport(properties.isDirectTransport());
 
             return cf;
@@ -75,6 +96,11 @@ public class SolaceJmsAutoConfiguration {
             throw new IllegalStateException("Unable to create Solace "
                     + "connection factory, ensure that the sol-jms-<version>.jar " + "is the classpath", ex);
         }
+    }
+
+    private SolaceServiceCredentials findFirstSolaceServiceCredentials() {
+        SolaceServiceCredentials credentials = solaceServicesInfoLoader.getSolaceServiceInfo();
+        return credentials != null ? credentials : new SolaceServiceCredentials();
     }
 
 }
