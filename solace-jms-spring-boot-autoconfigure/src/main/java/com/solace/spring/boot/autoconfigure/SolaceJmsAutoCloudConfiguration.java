@@ -18,7 +18,6 @@
  */
 package com.solace.spring.boot.autoconfigure;
 
-import java.util.Hashtable;
 import javax.jms.ConnectionFactory;
 
 import org.slf4j.Logger;
@@ -36,9 +35,7 @@ import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
 import com.solace.spring.cloud.core.SolaceMessagingInfo;
 import com.solacesystems.jms.SolConnectionFactory;
-import com.solacesystems.jms.SolConnectionFactoryImpl;
 import com.solacesystems.jms.SpringSolJmsConnectionFactoryCloudFactory;
-import com.solacesystems.jms.property.JMSProperties;
 
 @Configuration
 @AutoConfigureBefore(JmsAutoConfiguration.class)
@@ -47,54 +44,24 @@ import com.solacesystems.jms.property.JMSProperties;
 @ConditionalOnMissingBean(ConnectionFactory.class)
 @Conditional(CloudCondition.class)
 @EnableConfigurationProperties(SolaceJmsProperties.class)
-public class SolaceJmsAutoCloudConfiguration extends SpringSolJmsConfCloudFactoryImplBase implements SpringSolJmsConnectionFactoryCloudFactory {
+public class SolaceJmsAutoCloudConfiguration extends SpringSolJmsConfCloudFactoryImplBase
+		implements SpringSolJmsConnectionFactoryCloudFactory {
 
 	private static final Logger logger = LoggerFactory.getLogger(SolaceJmsAutoCloudConfiguration.class);
 
 	@Autowired
-	private SolaceJmsProperties properties;
-
-	public SolConnectionFactory getSolConnectionFactory(SolaceMessagingInfo solacemessaging) {
-		try {
-            Hashtable<String, String> ht = new Hashtable<String, String>();
-            ht.putAll(properties.getApiProperties());
-            JMSProperties props;
-            props = new JMSProperties((Hashtable<?, ?>) ht);
-			props.initialize();
-			SolConnectionFactoryImpl cf = new SolConnectionFactoryImpl(props);
-
-			// Use provided cloud information where available
-			if (solacemessaging.getSmfHost() != null)
-				cf.setHost(solacemessaging.getSmfHost());
-			else
-				cf.setHost(properties.getHost());
-			
-			if (solacemessaging.getMsgVpnName() != null)
-				cf.setVPN(solacemessaging.getMsgVpnName());
-			else
-				cf.setVPN(properties.getMsgVpn());
-
-			if (solacemessaging.getClientUsername() != null)
-				cf.setUsername(solacemessaging.getClientUsername());
-			else
-				cf.setUsername(properties.getClientUsername());
-
-			if (solacemessaging.getClientPassword() != null)
-				cf.setPassword(solacemessaging.getClientPassword());
-			else
-				cf.setPassword(properties.getClientPassword());
-
-            cf.setDirectTransport(properties.isDirectTransport());
-
-			return cf;
-		} catch (Exception ex) {
-			logger.error("Exception found during Solace Connection Factory creation.", ex);
-			throw new IllegalStateException("Unable to create Solace connection factory", ex);
-		}
+	public SolaceJmsAutoCloudConfiguration(SolaceJmsProperties properties) {
+		super(properties);
 	}
 
 	@Bean
+	@Override
 	public SolConnectionFactory getSolConnectionFactory() {
 		return getSolConnectionFactory(findFirstSolaceMessagingInfo());
+	}
+
+	@Override
+	public SolConnectionFactory getSolConnectionFactory(SolaceMessagingInfo solacemessaging) {
+		return super.getSolConnectionFactory(solacemessaging);
 	}
 }

@@ -29,11 +29,15 @@ import org.springframework.cloud.service.ServiceInfo;
 import org.springframework.context.annotation.Bean;
 import com.solace.spring.cloud.core.SolaceMessagingInfo;
 
-abstract class SpringSolJmsConfCloudFactoryImplBase {
+abstract class SpringSolJmsConfCloudFactoryImplBase extends SpringSolJmsConfImplBase {
 
 	private static final Logger logger = LoggerFactory.getLogger(SpringSolJmsConfCloudFactoryImplBase.class);
 
 	private CloudFactory cloudFactory = new CloudFactory();
+
+	SpringSolJmsConfCloudFactoryImplBase(SolaceJmsProperties properties) {
+		super(properties);
+	}
 
 	@Bean
 	public List<SolaceMessagingInfo> getSolaceMessagingInfos() {
