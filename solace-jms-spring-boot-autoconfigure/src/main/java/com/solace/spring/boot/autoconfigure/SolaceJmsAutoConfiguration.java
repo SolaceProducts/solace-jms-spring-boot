@@ -22,7 +22,6 @@ import javax.jms.ConnectionFactory;
 
 import com.solace.services.loader.SolaceCredentialsLoader;
 import com.solace.services.loader.model.SolaceServiceCredentials;
-import com.solace.services.loader.model.SolaceServiceCredentialsImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,11 +31,12 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.jms.JmsAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.solacesystems.jms.SolConnectionFactory;
-import com.solacesystems.jms.SolConnectionFactoryImpl;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Configuration
 @AutoConfigureBefore(JmsAutoConfiguration.class)
@@ -44,7 +44,7 @@ import com.solacesystems.jms.SolConnectionFactoryImpl;
 @ConditionalOnClass({ ConnectionFactory.class, SolConnectionFactory.class })
 @ConditionalOnMissingBean(ConnectionFactory.class)
 @EnableConfigurationProperties(SolaceJmsProperties.class)
-public class SolaceJmsAutoConfiguration extends SpringSolJmsConfImplBase {
+public class SolaceJmsAutoConfiguration extends SolaceJmsAutoConfigurationBase<SolaceServiceCredentials> {
 
     private static final Logger logger = LoggerFactory.getLogger(SolaceJmsAutoConfiguration.class);
     private SolaceCredentialsLoader solaceServicesInfoLoader = new SolaceCredentialsLoader();
@@ -54,14 +54,14 @@ public class SolaceJmsAutoConfiguration extends SpringSolJmsConfImplBase {
         super(properties);
     }
 
-    @Bean
-    public SolConnectionFactoryImpl connectionFactory() {
-        return getSolConnectionFactory(findFirstSolaceServiceCredentials());
+    @Override
+    SolaceServiceCredentials findFirstSolaceServiceCredentialsImpl() {
+        return solaceServicesInfoLoader.getSolaceServiceInfo();
     }
 
-    private SolaceServiceCredentials findFirstSolaceServiceCredentials() {
-        SolaceServiceCredentials credentials = solaceServicesInfoLoader.getSolaceServiceInfo();
-        return credentials != null ? credentials : new SolaceServiceCredentialsImpl();
+    @Override
+    List<SolaceServiceCredentials> getSolaceServiceCredentialsImpl() {
+        return new ArrayList<>(solaceServicesInfoLoader.getAllSolaceServiceInfo().values());
     }
 
 }

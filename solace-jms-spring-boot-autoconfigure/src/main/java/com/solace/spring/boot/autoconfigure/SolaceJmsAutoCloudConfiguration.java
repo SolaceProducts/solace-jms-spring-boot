@@ -29,13 +29,16 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.jms.JmsAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.cloud.Cloud;
 import org.springframework.cloud.CloudFactory;
-import org.springframework.context.annotation.Bean;
+import org.springframework.cloud.service.ServiceInfo;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
 import com.solace.spring.cloud.core.SolaceMessagingInfo;
 import com.solacesystems.jms.SolConnectionFactory;
-import com.solacesystems.jms.SpringSolJmsConnectionFactoryCloudFactory;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Configuration
 @AutoConfigureBefore(JmsAutoConfiguration.class)
@@ -44,24 +47,54 @@ import com.solacesystems.jms.SpringSolJmsConnectionFactoryCloudFactory;
 @ConditionalOnMissingBean(ConnectionFactory.class)
 @Conditional(CloudCondition.class)
 @EnableConfigurationProperties(SolaceJmsProperties.class)
-public class SolaceJmsAutoCloudConfiguration extends SpringSolJmsConfCloudFactoryImplBase
-		implements SpringSolJmsConnectionFactoryCloudFactory {
+public class SolaceJmsAutoCloudConfiguration extends SolaceJmsAutoConfigurationBase<SolaceMessagingInfo> {
 
 	private static final Logger logger = LoggerFactory.getLogger(SolaceJmsAutoCloudConfiguration.class);
+	private CloudFactory cloudFactory = new CloudFactory();
 
 	@Autowired
 	public SolaceJmsAutoCloudConfiguration(SolaceJmsProperties properties) {
 		super(properties);
 	}
 
-	@Bean
 	@Override
-	public SolConnectionFactory getSolConnectionFactory() {
-		return getSolConnectionFactory(findFirstSolaceMessagingInfo());
+	SolaceMessagingInfo findFirstSolaceServiceCredentialsImpl() {
+		SolaceMessagingInfo solacemessaging = null;
+		Cloud cloud = cloudFactory.getCloud();
+		List<ServiceInfo> serviceInfos = cloud.getServiceInfos();
+		for (ServiceInfo serviceInfo : serviceInfos) {
+			// Stop when we find the first one...
+			// TODO: Consider annotation driven selection, or sorted plan based
+			// selection
+			if (serviceInfo instanceof SolaceMessagingInfo) {
+				solacemessaging = (SolaceMessagingInfo) serviceInfo;
+				logger.info("Found Cloud Solace Messaging Service Instance Id: " + solacemessaging.getId());
+				break;
+			}
+		}
+
+		if (solacemessaging == null) {
+			// The CloudCondition should shield from this happening, should not
+			// arrive to this state.
+			logger.error("Cloud Solace Messaging Info was not found, cannot auto-configure");
+			throw new IllegalStateException(
+					"Unable to create SolConnectionFactory did not find SolaceMessagingInfo in the current cloud environment");
+		}
+
+		return solacemessaging;
 	}
 
 	@Override
-	public SolConnectionFactory getSolConnectionFactory(SolaceMessagingInfo solacemessaging) {
-		return super.getSolConnectionFactory(solacemessaging);
+	List<SolaceMessagingInfo> getSolaceServiceCredentialsImpl() {
+		List<SolaceMessagingInfo> solaceMessagingInfoList = new ArrayList<>();
+		Cloud cloud = cloudFactory.getCloud();
+
+		List<ServiceInfo> serviceInfos = cloud.getServiceInfos();
+		for (ServiceInfo serviceInfo : serviceInfos) {
+			if (serviceInfo instanceof SolaceMessagingInfo) {
+				solaceMessagingInfoList.add((SolaceMessagingInfo) serviceInfo);
+			}
+		}
+		return solaceMessagingInfoList;
 	}
 }

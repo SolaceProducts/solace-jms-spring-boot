@@ -1,5 +1,6 @@
 package com.solace.spring.boot.autoconfigure;
 
+import com.solacesystems.jms.SpringSolJmsConnectionFactoryCloudFactory;
 import org.json.JSONObject;
 import org.junit.After;
 import org.junit.Rule;
@@ -8,20 +9,23 @@ import org.springframework.boot.autoconfigure.jms.JmsAutoConfiguration;
 import org.springframework.boot.test.util.EnvironmentTestUtils;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.ResolvableType;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public abstract class SolaceJmsAutoConfigurationTestBase {
     @Configuration public static class EmptyConfiguration {}
     @Rule public final EnvironmentVariables environmentVariables = new EnvironmentVariables();
 
     AnnotationConfigApplicationContext context;
-    private Class<?> configClass;
+    private Class<? extends SpringSolJmsConnectionFactoryCloudFactory> configClass;
 
-    SolaceJmsAutoConfigurationTestBase(Class<?> configClass) {
+    SolaceJmsAutoConfigurationTestBase(Class<? extends SpringSolJmsConnectionFactoryCloudFactory> configClass) {
         this.configClass = configClass;
     }
 
@@ -94,5 +98,20 @@ public abstract class SolaceJmsAutoConfigurationTestBase {
         applicationContext.register(configClass, JmsAutoConfiguration.class);
         applicationContext.refresh();
         this.context = applicationContext;
+    }
+
+    static Set<Object[]> getTestParameters(Set<ResolvableType> testClasses) {
+        Set<Object[]> parameters = new HashSet<>();
+        for (ResolvableType resolvableRawClass : testClasses) {
+            Class<?> rawClass = resolvableRawClass.resolve();
+            StringBuilder testName = new StringBuilder(rawClass.getSimpleName());
+            for (ResolvableType resolvableGeneric : resolvableRawClass.getGenerics()) {
+                Class<?> genericClass = resolvableGeneric.getRawClass();
+                if (genericClass != null) testName = testName.append('—').append(genericClass.getSimpleName());
+            }
+
+            parameters.add(new Object[]{testName.toString(), rawClass});
+        }
+        return parameters;
     }
 }
