@@ -1,6 +1,7 @@
 package com.solace.spring.boot.autoconfigure;
 
 import com.solace.services.loader.model.SolaceServiceCredentials;
+import com.solace.services.loader.model.SolaceServiceCredentialsImpl;
 import com.solace.spring.cloud.core.SolaceMessagingInfo;
 import com.solacesystems.jms.SpringSolJmsJndiTemplateCloudFactory;
 import org.slf4j.Logger;
@@ -51,20 +52,22 @@ abstract class SolaceJndiAutoConfigurationBase implements SpringSolJmsJndiTempla
     @Override
     public JndiTemplate getJndiTemplate(SolaceServiceCredentials solaceServiceCredentials) {
         try {
+            SolaceServiceCredentials credentials = solaceServiceCredentials != null ?
+                    solaceServiceCredentials : new SolaceServiceCredentialsImpl();
+
             Properties env = new Properties();
             env.putAll(properties.getApiProperties());
             env.put(InitialContext.INITIAL_CONTEXT_FACTORY, "com.solacesystems.jndi.SolJNDIInitialContextFactory");
 
-            env.put(InitialContext.PROVIDER_URL, solaceServiceCredentials.getJmsJndiUri() != null ?
-                    solaceServiceCredentials.getJmsJndiUri() : properties.getHost());
+            env.put(InitialContext.PROVIDER_URL, credentials.getJmsJndiUri() != null ?
+                    credentials.getJmsJndiUri() : properties.getHost());
             env.put(Context.SECURITY_PRINCIPAL,
-                    solaceServiceCredentials.getClientUsername() != null && solaceServiceCredentials.getMsgVpnName() != null ?
-                            solaceServiceCredentials.getClientUsername() + '@' + solaceServiceCredentials.getMsgVpnName() :
+                    credentials.getClientUsername() != null && credentials.getMsgVpnName() != null ?
+                            credentials.getClientUsername() + '@' + credentials.getMsgVpnName() :
                             properties.getClientUsername() + '@' + properties.getMsgVpn());
 
-            env.put(Context.SECURITY_CREDENTIALS, solaceServiceCredentials.getClientPassword() != null ?
-                    solaceServiceCredentials.getClientPassword() :
-                    properties.getClientPassword());
+            env.put(Context.SECURITY_CREDENTIALS, credentials.getClientPassword() != null ?
+                    credentials.getClientPassword() : properties.getClientPassword());
 
             JndiTemplate jndiTemplate = new JndiTemplate();
             jndiTemplate.setEnvironment(env);
