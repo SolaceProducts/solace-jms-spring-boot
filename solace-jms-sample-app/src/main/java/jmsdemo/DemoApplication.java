@@ -1,7 +1,12 @@
 package jmsdemo;
 
 import java.util.Iterator;
+import java.util.List;
 
+import com.solace.services.loader.model.SolaceServiceCredentials;
+import com.solace.spring.cloud.core.SolaceMessagingInfo;
+import com.solacesystems.jms.SolConnectionFactory;
+import com.solacesystems.jms.SpringSolJmsConnectionFactoryCloudFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +23,7 @@ import org.springframework.stereotype.Service;
 
 @SpringBootApplication
 public class DemoApplication {
-    
+
     public static void main(String[] args) {
         SpringApplication.run(DemoApplication.class, args);
     }
@@ -30,7 +35,19 @@ public class DemoApplication {
 
         @Autowired
         private JmsTemplate jmsTemplate;
-        
+
+        // Other beans that can be used together to create a customized JmsTemplate
+        @Autowired private SolConnectionFactory solConnectionFactory;
+        @Autowired private SpringSolJmsConnectionFactoryCloudFactory springSolJmsConnectionFactoryCloudFactory;
+        @Autowired private SolaceServiceCredentials solaceServiceCredentials;
+        @Autowired private List<SolaceServiceCredentials> solaceServiceCredentialsList;
+
+        /*
+        For backwards compatibility:
+        - As before, these exist only in the specific scenario where the app is deployed in Cloud Foundry.*/
+        @Autowired(required=false) private List<SolaceMessagingInfo> solaceMessagingInfos;
+        @Autowired(required=false) private SolaceMessagingInfo solaceMessagingInfo;
+
         @Value("${solace.jms.demoQueueName}")
         private String queueName;
 
@@ -44,7 +61,7 @@ public class DemoApplication {
 
     @Component
     static class MessageHandler {
- 
+
         private static final Logger logger = LoggerFactory.getLogger(MessageHandler.class);
 
         // Retrieve the name of the queue from the application.properties file
@@ -57,7 +74,7 @@ public class DemoApplication {
         	Iterator<String> keyIter = hdrs.keySet().iterator();
         	while (keyIter.hasNext()) {
         		String key = keyIter.next();
-            	msgAsStr.append("\n"+key+": "+hdrs.get(key));        		
+            	msgAsStr.append("\n"+key+": "+hdrs.get(key));
         	}
         	msgAsStr.append("\nPayload: "+msg.getPayload());
             logger.info(msgAsStr.toString());
