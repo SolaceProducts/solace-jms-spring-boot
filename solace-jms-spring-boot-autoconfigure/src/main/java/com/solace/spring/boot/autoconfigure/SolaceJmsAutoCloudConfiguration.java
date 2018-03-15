@@ -20,6 +20,7 @@ package com.solace.spring.boot.autoconfigure;
 
 import javax.jms.ConnectionFactory;
 
+import com.solace.services.loader.model.SolaceServiceCredentials;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,10 +33,12 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.cloud.Cloud;
 import org.springframework.cloud.CloudFactory;
 import org.springframework.cloud.service.ServiceInfo;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
 import com.solace.spring.cloud.core.SolaceMessagingInfo;
 import com.solacesystems.jms.SolConnectionFactory;
+import org.springframework.context.annotation.Primary;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +50,7 @@ import java.util.List;
 @ConditionalOnMissingBean(ConnectionFactory.class)
 @Conditional(CloudCondition.class)
 @EnableConfigurationProperties(SolaceJmsProperties.class)
-public class SolaceJmsAutoCloudConfiguration extends SolaceJmsAutoConfigurationBase<SolaceMessagingInfo> {
+public class SolaceJmsAutoCloudConfiguration extends SolaceJmsAutoConfigurationBase {
 
 	private static final Logger logger = LoggerFactory.getLogger(SolaceJmsAutoCloudConfiguration.class);
 	private CloudFactory cloudFactory = new CloudFactory();
@@ -58,7 +61,22 @@ public class SolaceJmsAutoCloudConfiguration extends SolaceJmsAutoConfigurationB
 	}
 
 	@Override
-	SolaceMessagingInfo findFirstSolaceServiceCredentialsImpl() {
+	SolaceServiceCredentials findFirstSolaceServiceCredentialsImpl() {
+		return findFirstSolaceMessagingInfo();
+	}
+
+	/**
+	 * Gets the first detected {@link SolaceMessagingInfo}.
+	 *
+	 * @deprecated As of 1.1.0, usage of {@link SolaceMessagingInfo}
+	 * was replaced by its interface, {@link SolaceServiceCredentials}.
+	 * Use {@link #findFirstSolaceServiceCredentials()} instead.
+	 *
+	 * @return If in a Cloud Foundry environment, a Solace Messaging service is returned, otherwise null
+	 */
+	@Deprecated
+	@Bean @Primary
+	public SolaceMessagingInfo findFirstSolaceMessagingInfo() {
 		SolaceMessagingInfo solacemessaging = null;
 		Cloud cloud = cloudFactory.getCloud();
 		List<ServiceInfo> serviceInfos = cloud.getServiceInfos();
@@ -85,7 +103,14 @@ public class SolaceJmsAutoCloudConfiguration extends SolaceJmsAutoConfigurationB
 	}
 
 	@Override
-	List<SolaceMessagingInfo> getSolaceServiceCredentialsImpl() {
+	List<SolaceServiceCredentials> getSolaceServiceCredentialsImpl() {
+		return new ArrayList<SolaceServiceCredentials>(getSolaceMessagingInfos());
+	}
+
+	@Deprecated
+	@Override
+	@Bean @Primary
+	public List<SolaceMessagingInfo> getSolaceMessagingInfos() {
 		List<SolaceMessagingInfo> solaceMessagingInfoList = new ArrayList<>();
 		Cloud cloud = cloudFactory.getCloud();
 

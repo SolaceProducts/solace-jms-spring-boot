@@ -2,6 +2,7 @@ package com.solace.spring.boot.autoconfigure;
 
 import com.solace.services.loader.model.SolaceServiceCredentials;
 import com.solace.services.loader.model.SolaceServiceCredentialsImpl;
+import com.solace.spring.cloud.core.SolaceMessagingInfo;
 import com.solacesystems.jms.SolConnectionFactory;
 import com.solacesystems.jms.SolConnectionFactoryImpl;
 import com.solacesystems.jms.SpringSolJmsConnectionFactoryCloudFactory;
@@ -13,8 +14,7 @@ import org.springframework.context.annotation.Bean;
 import java.util.Hashtable;
 import java.util.List;
 
-abstract class SolaceJmsAutoConfigurationBase<T extends SolaceServiceCredentials>
-        implements SpringSolJmsConnectionFactoryCloudFactory<T> {
+abstract class SolaceJmsAutoConfigurationBase implements SpringSolJmsConnectionFactoryCloudFactory {
     private static final Logger logger = LoggerFactory.getLogger(SolaceJmsAutoConfigurationBase.class);
 
     private SolaceJmsProperties properties;
@@ -23,18 +23,18 @@ abstract class SolaceJmsAutoConfigurationBase<T extends SolaceServiceCredentials
         this.properties = properties;
     }
 
-    abstract T findFirstSolaceServiceCredentialsImpl();
-    abstract List<T> getSolaceServiceCredentialsImpl();
+    abstract SolaceServiceCredentials findFirstSolaceServiceCredentialsImpl();
+    abstract List<SolaceServiceCredentials> getSolaceServiceCredentialsImpl();
 
     @Bean
     @Override
-    public T findFirstSolaceServiceCredentials() {
+    public SolaceServiceCredentials findFirstSolaceServiceCredentials() {
         return findFirstSolaceServiceCredentialsImpl();
     }
 
     @Bean
     @Override
-    public List<T> getSolaceServiceCredentials() {
+    public List<SolaceServiceCredentials> getSolaceServiceCredentials() {
         return getSolaceServiceCredentialsImpl();
     }
 
@@ -80,8 +80,13 @@ abstract class SolaceJmsAutoConfigurationBase<T extends SolaceServiceCredentials
         }
     }
 
-    private T findSolaceServiceCredentialsById(String id) {
-        for (T credentials : getSolaceServiceCredentialsImpl())
+    @Override @Deprecated
+    public List<SolaceMessagingInfo> getSolaceMessagingInfos() {
+        return null;
+    }
+
+    private SolaceServiceCredentials findSolaceServiceCredentialsById(String id) {
+        for (SolaceServiceCredentials credentials : getSolaceServiceCredentialsImpl())
             if (credentials.getId().equals(id)) return credentials;
         return null;
     }

@@ -22,25 +22,26 @@ package com.solacesystems.jms;
 import java.util.List;
 
 import com.solace.services.loader.model.SolaceServiceCredentials;
+import com.solace.spring.cloud.core.SolaceMessagingInfo;
 
 /**
  * A Factory for {@link SolConnectionFactory} to Support Cloud Environments having
  * multiple solace-messaging services.
  */
-public interface SpringSolJmsConnectionFactoryCloudFactory<T extends SolaceServiceCredentials> {
+public interface SpringSolJmsConnectionFactoryCloudFactory {
 	/**
 	 * Gets the first detected {@link SolaceServiceCredentials}.
 	 *
 	 * @return A Solace Messaging service
 	 */
-	T findFirstSolaceServiceCredentials();
+	SolaceServiceCredentials findFirstSolaceServiceCredentials();
 
 	/**
 	 * Lists All Cloud Environment detected Solace Messaging services.
 	 *
 	 * @return List of all Cloud Environment detected Solace Messaging services
 	 */
-	List<T> getSolaceServiceCredentials();
+	List<SolaceServiceCredentials> getSolaceServiceCredentials();
 
 	/**
 	 * Returns a {@link SolConnectionFactory} based on the first detected {@link SolaceServiceCredentials}.
@@ -66,4 +67,16 @@ public interface SpringSolJmsConnectionFactoryCloudFactory<T extends SolaceServi
 	 */
 	SolConnectionFactory getSolConnectionFactory(SolaceServiceCredentials solaceServiceCredentials);
 
+	/**
+	 * Lists All Cloud Environment detected Solace Messaging services.
+	 *
+	 * @deprecated As of 1.1.0, usage of {@link SolaceMessagingInfo}
+	 * was replaced by its interface, {@link SolaceServiceCredentials}.
+	 * Use {@link #getSolaceServiceCredentials()} instead.
+	 *
+	 * @return If in a Cloud Foundry environment, list of all Cloud Environment detected Solace Messaging services,
+	 * otherwise null
+	 */
+	@Deprecated
+	List<SolaceMessagingInfo> getSolaceMessagingInfos();
 }

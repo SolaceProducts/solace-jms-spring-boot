@@ -1,6 +1,7 @@
 package com.solace.spring.boot.autoconfigure;
 
 import com.solace.services.loader.model.SolaceServiceCredentials;
+import com.solace.spring.cloud.core.SolaceMessagingInfo;
 import com.solacesystems.jms.SpringSolJmsJndiTemplateCloudFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,8 +13,7 @@ import javax.naming.InitialContext;
 import java.util.List;
 import java.util.Properties;
 
-abstract class SolaceJndiAutoConfigurationBase<T extends SolaceServiceCredentials>
-        implements SpringSolJmsJndiTemplateCloudFactory<T> {
+abstract class SolaceJndiAutoConfigurationBase implements SpringSolJmsJndiTemplateCloudFactory {
 
     private static final Logger logger = LoggerFactory.getLogger(SolaceJndiAutoConfigurationBase.class);
     private SolaceJmsProperties properties;
@@ -22,18 +22,18 @@ abstract class SolaceJndiAutoConfigurationBase<T extends SolaceServiceCredential
         this.properties = properties;
     }
 
-    abstract T findFirstSolaceServiceCredentialsImpl();
-    abstract List<T> getSolaceServiceCredentialsImpl();
+    abstract SolaceServiceCredentials findFirstSolaceServiceCredentialsImpl();
+    abstract List<SolaceServiceCredentials> getSolaceServiceCredentialsImpl();
 
     @Bean
     @Override
-    public T findFirstSolaceServiceCredentials() {
+    public SolaceServiceCredentials findFirstSolaceServiceCredentials() {
         return findFirstSolaceServiceCredentialsImpl();
     }
 
     @Bean
     @Override
-    public List<T> getSolaceServiceCredentials() {
+    public List<SolaceServiceCredentials> getSolaceServiceCredentials() {
         return getSolaceServiceCredentialsImpl();
     }
 
@@ -76,8 +76,13 @@ abstract class SolaceJndiAutoConfigurationBase<T extends SolaceServiceCredential
         }
     }
 
-    private T findSolaceServiceCredentialsById(String id) {
-        for (T credentials : getSolaceServiceCredentialsImpl())
+    @Override @Deprecated
+    public List<SolaceMessagingInfo> getSolaceMessagingInfos() {
+        return null;
+    }
+
+    private SolaceServiceCredentials findSolaceServiceCredentialsById(String id) {
+        for (SolaceServiceCredentials credentials : getSolaceServiceCredentialsImpl())
             if (credentials.getId().equals(id)) return credentials;
         return null;
     }

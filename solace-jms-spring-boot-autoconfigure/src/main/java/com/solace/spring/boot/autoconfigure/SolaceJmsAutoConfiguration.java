@@ -44,7 +44,7 @@ import java.util.List;
 @ConditionalOnClass({ ConnectionFactory.class, SolConnectionFactory.class })
 @ConditionalOnMissingBean(ConnectionFactory.class)
 @EnableConfigurationProperties(SolaceJmsProperties.class)
-public class SolaceJmsAutoConfiguration extends SolaceJmsAutoConfigurationBase<SolaceServiceCredentials> {
+public class SolaceJmsAutoConfiguration extends SolaceJmsAutoConfigurationBase {
 
     private static final Logger logger = LoggerFactory.getLogger(SolaceJmsAutoConfiguration.class);
     private SolaceCredentialsLoader solaceServicesInfoLoader = new SolaceCredentialsLoader();
