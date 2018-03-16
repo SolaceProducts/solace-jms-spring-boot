@@ -1,7 +1,7 @@
 package com.solace.spring.boot.autoconfigure;
 
-import com.solace.services.loader.model.SolaceServiceCredentials;
-import com.solace.services.loader.model.SolaceServiceCredentialsImpl;
+import com.solace.services.core.model.SolaceServiceCredentials;
+import com.solace.services.core.model.SolaceServiceCredentialsImpl;
 import com.solace.spring.cloud.core.SolaceMessagingInfo;
 import com.solacesystems.jms.SpringSolJmsJndiTemplateCloudFactory;
 import org.slf4j.Logger;

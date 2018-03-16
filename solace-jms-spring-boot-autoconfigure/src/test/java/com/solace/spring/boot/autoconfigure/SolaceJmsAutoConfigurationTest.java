@@ -18,7 +18,7 @@
  */
 package com.solace.spring.boot.autoconfigure;
 
-import com.solace.services.loader.model.SolaceServiceCredentials;
+import com.solace.services.core.model.SolaceServiceCredentials;
 import com.solacesystems.jms.SolConnectionFactory;
 import com.solacesystems.jms.SolConnectionFactoryImpl;
 import com.solacesystems.jms.SpringSolJmsConnectionFactoryCloudFactory;

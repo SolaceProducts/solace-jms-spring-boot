@@ -3,7 +3,7 @@ package jmsdemo;
 import java.util.Iterator;
 import java.util.List;
 
-import com.solace.services.loader.model.SolaceServiceCredentials;
+import com.solace.services.core.model.SolaceServiceCredentials;
 import com.solace.spring.cloud.core.SolaceMessagingInfo;
 import com.solacesystems.jms.SolConnectionFactory;
 import com.solacesystems.jms.SpringSolJmsConnectionFactoryCloudFactory;
