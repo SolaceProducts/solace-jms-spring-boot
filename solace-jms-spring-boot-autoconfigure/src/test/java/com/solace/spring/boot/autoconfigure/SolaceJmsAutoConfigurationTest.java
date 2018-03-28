@@ -23,11 +23,7 @@ import com.solacesystems.jms.SolConnectionFactory;
 import com.solacesystems.jms.SolConnectionFactoryImpl;
 import com.solacesystems.jms.SpringSolJmsConnectionFactoryCloudFactory;
 import org.junit.Test;
-import org.springframework.core.ResolvableType;
 import org.springframework.jms.core.JmsTemplate;
-
-import java.util.Collections;
-import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -85,8 +81,6 @@ public class SolaceJmsAutoConfigurationTest extends SolaceJmsAutoConfigurationTe
         assertNotNull(this.context.getBean(SolConnectionFactory.class));
         assertNotNull(this.context.getBean(SpringSolJmsConnectionFactoryCloudFactory.class));
         assertNotNull(this.context.getBean(SolaceServiceCredentials.class));
-        assertNotNull(this.context.getBean(
-                ResolvableType.forClassWithGenerics(List.class, SolaceServiceCredentials.class).resolve()));
     }
 
 	@Test
@@ -103,7 +97,5 @@ public class SolaceJmsAutoConfigurationTest extends SolaceJmsAutoConfigurationTe
 		assertNotNull(this.context.getBean(SolConnectionFactory.class));
 		assertNotNull(this.context.getBean(SpringSolJmsConnectionFactoryCloudFactory.class));
 		assertNull(this.context.getBean(SolaceServiceCredentials.class));
-		assertEquals(Collections.EMPTY_LIST, this.context.getBean(
-				ResolvableType.forClassWithGenerics(List.class, SolaceServiceCredentials.class).resolve()));
 	}
 }

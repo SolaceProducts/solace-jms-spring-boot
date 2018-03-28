@@ -24,18 +24,14 @@ abstract class SolaceJmsAutoConfigurationBase implements SpringSolJmsConnectionF
     }
 
     abstract SolaceServiceCredentials findFirstSolaceServiceCredentialsImpl();
-    abstract List<SolaceServiceCredentials> getSolaceServiceCredentialsImpl();
+
+    @Override
+    public abstract List<SolaceServiceCredentials> getSolaceServiceCredentials();
 
     @Bean
     @Override
     public SolaceServiceCredentials findFirstSolaceServiceCredentials() {
         return findFirstSolaceServiceCredentialsImpl();
-    }
-
-    @Bean
-    @Override
-    public List<SolaceServiceCredentials> getSolaceServiceCredentials() {
-        return getSolaceServiceCredentialsImpl();
     }
 
     @Bean
@@ -87,7 +83,7 @@ abstract class SolaceJmsAutoConfigurationBase implements SpringSolJmsConnectionF
     }
 
     private SolaceServiceCredentials findSolaceServiceCredentialsById(String id) {
-        for (SolaceServiceCredentials credentials : getSolaceServiceCredentialsImpl())
+        for (SolaceServiceCredentials credentials : getSolaceServiceCredentials())
             if (credentials.getId().equals(id)) return credentials;
         return null;
     }

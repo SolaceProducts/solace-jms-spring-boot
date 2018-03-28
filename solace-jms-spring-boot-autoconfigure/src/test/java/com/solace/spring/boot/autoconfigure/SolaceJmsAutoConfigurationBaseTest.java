@@ -37,7 +37,7 @@ public class SolaceJmsAutoConfigurationBaseTest extends SolaceJmsAutoConfigurati
         jmsAutoConfBase = Mockito.mock(SolaceJmsAutoConfigurationBase.class, Mockito.CALLS_REAL_METHODS);
         jmsAutoConfBase.setProperties(solaceJmsProperties);
         Mockito.doReturn(solaceServiceCredentials).when(jmsAutoConfBase).findFirstSolaceServiceCredentialsImpl();
-        Mockito.doReturn(credsList).when(jmsAutoConfBase).getSolaceServiceCredentialsImpl();
+        Mockito.doReturn(credsList).when(jmsAutoConfBase).getSolaceServiceCredentials();
     }
 
     @Test
@@ -99,6 +99,6 @@ public class SolaceJmsAutoConfigurationBaseTest extends SolaceJmsAutoConfigurati
 
     private void disableSolaceServiceCredentials() {
         Mockito.doReturn(null).when(jmsAutoConfBase).findFirstSolaceServiceCredentialsImpl();
-        Mockito.doReturn(new ArrayList<>()).when(jmsAutoConfBase).getSolaceServiceCredentialsImpl();
+        Mockito.doReturn(new ArrayList<>()).when(jmsAutoConfBase).getSolaceServiceCredentials();
     }
 }
