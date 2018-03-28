@@ -1,6 +1,10 @@
 package jndidemo;
 
 import javax.jms.ConnectionFactory;
+
+import com.solace.services.core.model.SolaceServiceCredentials;
+import com.solace.spring.cloud.core.SolaceMessagingInfo;
+import com.solacesystems.jms.SpringSolJmsJndiTemplateCloudFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -11,6 +15,8 @@ import org.springframework.jms.support.destination.JndiDestinationResolver;
 import org.springframework.jndi.JndiObjectFactoryBean;
 import org.springframework.jndi.JndiTemplate;
 
+import java.util.List;
+
 @Configuration
 public class JndiProducerConfiguration {
 
@@ -20,9 +26,17 @@ public class JndiProducerConfiguration {
 
 
     // Use from the jndi connection config
-    @Autowired
-	private JndiTemplate jndiTemplate;
-    
+    @Autowired private JndiTemplate jndiTemplate;
+    @Autowired private SpringSolJmsJndiTemplateCloudFactory springSolJmsJndiTemplateCloudFactory;
+    @Autowired private SolaceServiceCredentials solaceServiceCredentials;
+    @Autowired private List<SolaceServiceCredentials> solaceServiceCredentialsList;
+
+    /*
+        For backwards compatibility:
+        - As before, these exist only in the specific scenario where the app is deployed in Cloud Foundry.*/
+    @Autowired(required=false) private List<SolaceMessagingInfo> solaceMessagingInfos;
+    @Autowired(required=false) private SolaceMessagingInfo solaceMessagingInfo;
+
     @Bean
     public JndiObjectFactoryBean connectionFactory() {
         JndiObjectFactoryBean factoryBean = new JndiObjectFactoryBean();
@@ -48,7 +62,7 @@ public class JndiProducerConfiguration {
         jdr.setJndiTemplate(jndiTemplate);
         return jdr;
     }
-    
+
 	@Bean
 	public JmsTemplate producerJmsTemplate() {
 		JmsTemplate jt = new JmsTemplate(cachingConnectionFactory());
