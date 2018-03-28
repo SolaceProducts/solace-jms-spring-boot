@@ -46,7 +46,8 @@ abstract class SolaceJndiAutoConfigurationBase implements SpringSolJmsJndiTempla
 
     @Override
     public JndiTemplate getJndiTemplate(String id) {
-        return getJndiTemplate(findSolaceServiceCredentialsById(id));
+        SolaceServiceCredentials solaceServiceCredentials = findSolaceServiceCredentialsById(id);
+        return solaceServiceCredentials == null ? null : getJndiTemplate(solaceServiceCredentials);
     }
 
     @Override

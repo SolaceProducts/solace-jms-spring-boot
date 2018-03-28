@@ -14,6 +14,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 
 public class SolaceJmsAutoConfigurationBaseTest extends SolaceJmsAutoConfigurationTestBase {
     private SolaceJmsProperties solaceJmsProperties = getSolaceJmsProperties();
@@ -67,7 +68,7 @@ public class SolaceJmsAutoConfigurationBaseTest extends SolaceJmsAutoConfigurati
     public void testGetSolConnectionFactoryById() {
         validateSolConnectionFactory(jmsAutoConfBase.getSolConnectionFactory(solaceServiceCredentials.getId()), false);
         disableSolaceServiceCredentials();
-        validateSolConnectionFactory(jmsAutoConfBase.getSolConnectionFactory(solaceServiceCredentials.getId()), true);
+        assertNull((jmsAutoConfBase.getSolConnectionFactory(solaceServiceCredentials.getId())));
     }
 
     private void validateSolConnectionFactory(SolConnectionFactory solConnectionFactory, boolean isProperties) {

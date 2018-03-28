@@ -57,7 +57,8 @@ public interface SpringSolJmsJndiTemplateCloudFactory {
 	 * identified by the given ID.
 	 *
 	 * @param id The Solace Messaging service's ID
-	 * @return {@link JndiTemplate} based on the specified Solace Messaging service
+	 * @return {@link JndiTemplate} with the given Solace Messaging service ID,
+	 * otherwise null if the service cannot be found
 	 */
 	JndiTemplate getJndiTemplate(String id);
 
@@ -65,7 +66,8 @@ public interface SpringSolJmsJndiTemplateCloudFactory {
 	 * Returns a {@link JndiTemplate} based on the given {@link SolaceServiceCredentials}.
 	 *
 	 * @param solaceServiceCredentials The credentials to an existing Solace Messaging service
-	 * @return {@link JndiTemplate} based on the given {@link SolaceServiceCredentials}
+	 * @return {@link JndiTemplate} based on the given {@link SolaceServiceCredentials},
+	 * otherwise an application.properties based {@link JndiTemplate}
 	 */
 	JndiTemplate getJndiTemplate(SolaceServiceCredentials solaceServiceCredentials);
 

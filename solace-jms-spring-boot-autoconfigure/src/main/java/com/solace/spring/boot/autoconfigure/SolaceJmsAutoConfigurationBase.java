@@ -46,7 +46,8 @@ abstract class SolaceJmsAutoConfigurationBase implements SpringSolJmsConnectionF
 
     @Override
     public SolConnectionFactory getSolConnectionFactory(String id) {
-        return getSolConnectionFactory(findSolaceServiceCredentialsById(id));
+        SolaceServiceCredentials solaceServiceCredentials = findSolaceServiceCredentialsById(id);
+        return solaceServiceCredentials == null ? null : getSolConnectionFactory(solaceServiceCredentials);
     }
 
     @Override
