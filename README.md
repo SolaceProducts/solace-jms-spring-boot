@@ -9,6 +9,7 @@ For a high level introduction and explanation, you can also refer to the followi
 * [Overview](#overview)
 * [Using Auto-Configuration in your App](#using-auto-configuration-in-your-app)
 * [Building the Project Yourself](#building-the-project-yourself)
+* [Running the Sample](#running-the-sample)
 * [Contributing](#contributing)
 * [Authors](#authors)
 * [License](#license)
@@ -31,17 +32,17 @@ Spring Boot Auto-Configuration for the Solace JMS supports both programmatic cre
 
 See the associated `solace-jms-sample-app` for an example of how this is all put together in a simple application. To use Solace JMS you need to do these steps:
 
-1. Update your build
+1. Update your build.
 2. Autowire the `ConnectionFactory`.
-3. Configure your `application.properties`.
+3. Configure the application to use a Solace Messaging service.
 
 #### JNDI lookup of JMS objects
 
 See the associated `solace-jms-sample-app-jndi` for an example. To use JNDI with Solace JMS you need to do these steps:
 
-1. Update your build
-2. Autowire the `JndiTemplate` for further use e.g.: in a `JndiObjectFactoryBean`
-3. Configure your `application.properties`.
+1. Update your build.
+2. Autowire the `JndiTemplate` for further use e.g.: in a `JndiObjectFactoryBean`.
+3. Configure the application to use a Solace Messaging service.
 
 
 ### Updating your build
@@ -54,23 +55,49 @@ Here is how to include the spring boot starter in your project using Gradle and 
 
 #### Using it with Gradle
 
-```
+```groovy
 compile("com.solace.spring.boot:solace-jms-spring-boot-starter:1.+")
 ```
 
 #### Using it with Maven
 
-```
+```xml
 <dependency>
 	<groupId>com.solace.spring.boot</groupId>
 	<artifactId>solace-jms-spring-boot-starter</artifactId>
 	<version>1.+</version>
 </dependency>
 ```
+### Configure the Application to use your Solace Messaging Service Credentials
+#### Deploying your Application to a Cloud Platform
 
-### Updating your Application Properties
+By using [Spring Cloud Connectors](https://cloud.spring.io/spring-cloud-connectors/), this library can automatically configure a `ConnectionFactory` and/or a `JndiTemplate` using the detected Solace Messaging services when deployed on a Cloud Platform such as Cloud Foundry.
 
-Configuration of the `SpringJCSMPFactory` is done through the `application.properties` file. This is where users can control the Solace JMS API properties. Currently this project supports direct configuration of the following properties:
+Currently, the [Solace Cloud Foundry Cloud Connector](https://github.com/SolaceProducts/sl-spring-cloud-connectors) is the only connector that is supported by default in this library, but could easily be augmented by adding your own Solace Spring Cloud Connectors as dependencies to the [auto-configuration's POM](solace-jms-spring-boot-autoconfigure/pom.xml).
+
+For example:
+
+```xml
+<dependency>
+	<groupId>com.solace.cloud.cloudfoundry</groupId>
+	<artifactId>solace-spring-cloud-connector</artifactId>
+	<version>2.1.0</version>
+</dependency>
+```
+
+#### Exposing a Solace Messaging Service Manifest in the Application's Environment
+
+Configuration of the `ConnectionFactory` and/or the `JndiTemplate` can be done through exposing a Solace Messaging service manifest to the application's JVM properties or OS environment.
+
+For example, you can set a `SOLCAP_SERVICES` variable in either your JVM properties or OS's environment to directly contain a `VCAP_SERVICES`-formatted manifest file. In which case, the autoconfigure will pick up any Solace Messaging services in it and use them to accordingly configure your `JmsTemplate`.
+
+The properties provided by this externally-provided manifest can also be augmented using the values from the [application's properties file](#updating-your-application-properties).
+
+For details on valid manifest formats and other ways of exposing Solace service manifests to your application, see the [Manifest Load Order and Expected Formats](https://github.com/SolaceProducts/solace-services-info#manifest-load-order-and-expected-formats) section in the [Solace Services Info](https://github.com/SolaceProducts/solace-services-info) project.
+
+#### Updating your Application Properties
+
+Alternatively, configuration of the `JmsTemplate` can also be entirely done through the `application.properties` file. This is where users can control the Solace JMS API properties. Currently this project supports direct configuration of the following properties:
 
 ```
 solace.jms.host
