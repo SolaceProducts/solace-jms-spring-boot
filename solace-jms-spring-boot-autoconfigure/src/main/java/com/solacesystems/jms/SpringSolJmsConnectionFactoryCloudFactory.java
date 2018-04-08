@@ -55,7 +55,8 @@ public interface SpringSolJmsConnectionFactoryCloudFactory {
 	 * identified by the given ID.
 	 *
 	 * @param id The Solace Messaging service's ID
-	 * @return {@link SolConnectionFactory} based on the specified Solace Messaging service
+	 * @return {@link SolConnectionFactory} with the given Solace Messaging service ID,
+	 * otherwise null if the service cannot be found
 	 */
 	SolConnectionFactory getSolConnectionFactory(String id);
 
@@ -63,7 +64,8 @@ public interface SpringSolJmsConnectionFactoryCloudFactory {
 	 * Returns a {@link SolConnectionFactory} based on the given {@link SolaceServiceCredentials}.
 	 *
 	 * @param solaceServiceCredentials The credentials to an existing Solace Messaging service
-	 * @return {@link SolConnectionFactory} based on the given {@link SolaceServiceCredentials}
+	 * @return {@link SolConnectionFactory} based on the given {@link SolaceServiceCredentials},
+	 * otherwise an application.properties based {@link SolConnectionFactory}
 	 */
 	SolConnectionFactory getSolConnectionFactory(SolaceServiceCredentials solaceServiceCredentials);
 

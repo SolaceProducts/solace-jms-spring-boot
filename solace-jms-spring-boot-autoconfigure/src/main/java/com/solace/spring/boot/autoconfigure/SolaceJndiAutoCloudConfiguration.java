@@ -103,13 +103,12 @@ public class SolaceJndiAutoCloudConfiguration extends SolaceJndiAutoConfiguratio
 	}
 
 	@Override
-	List<SolaceServiceCredentials> getSolaceServiceCredentialsImpl() {
+	public List<SolaceServiceCredentials> getSolaceServiceCredentials() {
 		return new ArrayList<SolaceServiceCredentials>(getSolaceMessagingInfos());
 	}
 
 	@Deprecated
 	@Override
-	@Bean @Primary
 	public List<SolaceMessagingInfo> getSolaceMessagingInfos() {
 		List<SolaceMessagingInfo> solaceMessagingInfoList = new ArrayList<>();
 		Cloud cloud = cloudFactory.getCloud();

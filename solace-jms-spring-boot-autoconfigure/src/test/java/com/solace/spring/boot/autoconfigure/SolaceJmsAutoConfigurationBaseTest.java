@@ -14,6 +14,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 
 public class SolaceJmsAutoConfigurationBaseTest extends SolaceJmsAutoConfigurationTestBase {
     private SolaceJmsProperties solaceJmsProperties = getSolaceJmsProperties();
@@ -36,7 +37,7 @@ public class SolaceJmsAutoConfigurationBaseTest extends SolaceJmsAutoConfigurati
         jmsAutoConfBase = Mockito.mock(SolaceJmsAutoConfigurationBase.class, Mockito.CALLS_REAL_METHODS);
         jmsAutoConfBase.setProperties(solaceJmsProperties);
         Mockito.doReturn(solaceServiceCredentials).when(jmsAutoConfBase).findFirstSolaceServiceCredentialsImpl();
-        Mockito.doReturn(credsList).when(jmsAutoConfBase).getSolaceServiceCredentialsImpl();
+        Mockito.doReturn(credsList).when(jmsAutoConfBase).getSolaceServiceCredentials();
     }
 
     @Test
@@ -67,7 +68,7 @@ public class SolaceJmsAutoConfigurationBaseTest extends SolaceJmsAutoConfigurati
     public void testGetSolConnectionFactoryById() {
         validateSolConnectionFactory(jmsAutoConfBase.getSolConnectionFactory(solaceServiceCredentials.getId()), false);
         disableSolaceServiceCredentials();
-        validateSolConnectionFactory(jmsAutoConfBase.getSolConnectionFactory(solaceServiceCredentials.getId()), true);
+        assertNull((jmsAutoConfBase.getSolConnectionFactory(solaceServiceCredentials.getId())));
     }
 
     private void validateSolConnectionFactory(SolConnectionFactory solConnectionFactory, boolean isProperties) {
@@ -98,6 +99,6 @@ public class SolaceJmsAutoConfigurationBaseTest extends SolaceJmsAutoConfigurati
 
     private void disableSolaceServiceCredentials() {
         Mockito.doReturn(null).when(jmsAutoConfBase).findFirstSolaceServiceCredentialsImpl();
-        Mockito.doReturn(new ArrayList<>()).when(jmsAutoConfBase).getSolaceServiceCredentialsImpl();
+        Mockito.doReturn(new ArrayList<>()).when(jmsAutoConfBase).getSolaceServiceCredentials();
     }
 }

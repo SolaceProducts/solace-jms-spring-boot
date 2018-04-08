@@ -68,9 +68,7 @@ public class SolaceJmsAutoCloudConfigurationTest<T> extends SolaceJmsAutoConfigu
         classes.add(ResolvableType.forClass(SpringSolJmsConnectionFactoryCloudFactory.class));
         classes.add(ResolvableType.forClass(SolConnectionFactory.class));
         classes.add(ResolvableType.forClass(SolaceServiceCredentials.class));
-        classes.add(ResolvableType.forClassWithGenerics(List.class, SolaceServiceCredentials.class));
         classes.add(ResolvableType.forClass(SolaceMessagingInfo.class));
-        classes.add(ResolvableType.forClassWithGenerics(List.class, SolaceMessagingInfo.class));
         return getTestParameters(classes);
     }
 
@@ -266,11 +264,6 @@ public class SolaceJmsAutoCloudConfigurationTest<T> extends SolaceJmsAutoConfigu
 	}
 
 	private void validateBackwardsCompatibility() {
-		validateSSCBackwardsCompatibility();
-		validateSSCListBackwardsCompatibility();
-	}
-
-	private void validateSSCBackwardsCompatibility() {
 		//Expects SolaceMessagingInfo bean to be annotated with @Primary
 
 		assertEquals(2, this.context.getBeanNamesForType(SolaceServiceCredentials.class).length);
@@ -284,28 +277,5 @@ public class SolaceJmsAutoCloudConfigurationTest<T> extends SolaceJmsAutoConfigu
 
 		assertTrue(smi.getClass().isAssignableFrom(SolaceMessagingInfo.class));
 		assertTrue(!smi.getClass().isAssignableFrom(SolaceServiceCredentials.class));
-	}
-
-	private void validateSSCListBackwardsCompatibility() {
-		//Expects List<SolaceMessagingInfo> bean to be annotated with @Primary
-
-		@SuppressWarnings("unchecked")
-		Class<List<SolaceServiceCredentials>> sscListClass = (Class<List<SolaceServiceCredentials>>)
-				ResolvableType.forClassWithGenerics(List.class, SolaceServiceCredentials.class).resolve();
-		@SuppressWarnings("unchecked")
-		Class<List<SolaceMessagingInfo>> smiListClass = (Class<List<SolaceMessagingInfo>>)
-				ResolvableType.forClassWithGenerics(List.class, SolaceMessagingInfo.class).resolve();
-
-		assertEquals(2, this.context.getBeanNamesForType(sscListClass).length);
-		assertEquals(2, this.context.getBeanNamesForType(smiListClass).length);
-		List<? extends SolaceServiceCredentials> sscList = this.context.getBean(sscListClass);
-		List<? extends SolaceServiceCredentials> smiList = this.context.getBean(smiListClass);
-
-		//Primary child class always supersedes any parent
-		assertTrue(sscList.get(0).getClass().isAssignableFrom(SolaceMessagingInfo.class));
-		assertTrue(!sscList.get(0).getClass().isAssignableFrom(SolaceServiceCredentials.class));
-
-		assertTrue(smiList.get(0).getClass().isAssignableFrom(SolaceMessagingInfo.class));
-		assertTrue(!smiList.get(0).getClass().isAssignableFrom(SolaceServiceCredentials.class));
 	}
 }

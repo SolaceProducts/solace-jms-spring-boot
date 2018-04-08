@@ -40,12 +40,10 @@ public class DemoApplication {
         @Autowired private SolConnectionFactory solConnectionFactory;
         @Autowired private SpringSolJmsConnectionFactoryCloudFactory springSolJmsConnectionFactoryCloudFactory;
         @Autowired private SolaceServiceCredentials solaceServiceCredentials;
-        @Autowired private List<SolaceServiceCredentials> solaceServiceCredentialsList;
 
         /*
         For backwards compatibility:
         - As before, these exist only in the specific scenario where the app is deployed in Cloud Foundry.*/
-        @Autowired(required=false) private List<SolaceMessagingInfo> solaceMessagingInfos;
         @Autowired(required=false) private SolaceMessagingInfo solaceMessagingInfo;
 
         @Value("${solace.jms.demoQueueName}")

@@ -60,7 +60,7 @@ public class SolaceJmsAutoConfiguration extends SolaceJmsAutoConfigurationBase {
     }
 
     @Override
-    List<SolaceServiceCredentials> getSolaceServiceCredentialsImpl() {
+    public List<SolaceServiceCredentials> getSolaceServiceCredentials() {
         return new ArrayList<>(solaceServicesInfoLoader.getAllSolaceServiceInfo().values());
     }
 
