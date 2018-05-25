@@ -26,7 +26,7 @@ public class JndiProducerConfiguration {
     // Use from the jndi connection config
     @Autowired private JndiTemplate jndiTemplate;
     @Autowired private SpringSolJmsJndiTemplateCloudFactory springSolJmsJndiTemplateCloudFactory;
-    @Autowired private SolaceServiceCredentials solaceServiceCredentials;
+    @Autowired(required = false) private SolaceServiceCredentials solaceServiceCredentials;
 
     /*
         For backwards compatibility:
