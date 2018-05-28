@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ErrorHandler;
 
 @Configuration
+@EnableJms
 public class JndiConsumerConfiguration {
 
 	// Resource definitions: connection factory and queue destination

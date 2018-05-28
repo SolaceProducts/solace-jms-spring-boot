@@ -23,7 +23,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 @SpringBootApplication
-@EnableJms
 public class DemoApplication {
 
     public static void main(String[] args) {
