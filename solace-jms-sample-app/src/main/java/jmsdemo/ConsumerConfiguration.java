@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ErrorHandler;
 
 @Configuration
-@EnableJms
 public class ConsumerConfiguration {
 
     private static final Logger logger = LoggerFactory.getLogger(ConsumerConfiguration.class);

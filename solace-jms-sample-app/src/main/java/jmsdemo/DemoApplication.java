@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.jms.annotation.EnableJms;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.messaging.Message;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 @SpringBootApplication
+@EnableJms
 public class DemoApplication {
 
     public static void main(String[] args) {
