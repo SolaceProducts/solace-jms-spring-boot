@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jms.annotation.EnableJms;
 import org.springframework.jms.config.DefaultJmsListenerContainerFactory;
+import org.springframework.jms.config.SimpleJmsListenerContainerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ErrorHandler;
 
@@ -29,6 +30,14 @@ public class ConsumerConfiguration {
         factory.setErrorHandler(errorHandler);
         return factory;
     }
+
+  @Bean
+  public SimpleJmsListenerContainerFactory sFactory(ConnectionFactory connectionFactory, DemoErrorHandler errorHandler) {
+    SimpleJmsListenerContainerFactory factory = new SimpleJmsListenerContainerFactory();
+    factory.setConnectionFactory(connectionFactory);
+    factory.setErrorHandler(errorHandler);
+    return factory;
+  }
 
     @Service
     public class DemoErrorHandler implements ErrorHandler{   
