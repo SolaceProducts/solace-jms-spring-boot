@@ -183,6 +183,7 @@
 			<modules>
 				<module>solace-jms-sample-app</module>
 				<module>solace-jms-sample-app-jndi</module>
+				<module>solace-jms-sample-app-mixed</module>
 				<module>solace-jms-spring-boot-autoconfigure</module>
 				<module>solace-jms-spring-boot-starter</module>
 			</modules>
