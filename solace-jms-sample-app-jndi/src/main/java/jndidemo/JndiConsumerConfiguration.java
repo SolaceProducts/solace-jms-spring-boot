@@ -9,14 +9,17 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.jms.annotation.EnableJms;
 import org.springframework.jms.config.DefaultJmsListenerContainerFactory;
+import org.springframework.jms.config.SimpleJmsListenerContainerFactory;
 import org.springframework.jms.support.destination.JndiDestinationResolver;
 import org.springframework.jndi.JndiObjectFactoryBean;
 import org.springframework.jndi.JndiTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ErrorHandler;
 
+@Configuration
 @EnableJms
 public class JndiConsumerConfiguration {
 
@@ -59,7 +62,16 @@ public class JndiConsumerConfiguration {
        return factory;
     }
 
-    @Service
+  @Bean
+  public SimpleJmsListenerContainerFactory sFactory(DemoErrorHandler errorHandler) {
+    SimpleJmsListenerContainerFactory factory = new SimpleJmsListenerContainerFactory();
+    factory.setConnectionFactory((ConnectionFactory) connectionFactory().getObject());
+    factory.setDestinationResolver(jndiDestinationResolver());
+    factory.setErrorHandler(errorHandler);
+    return factory;
+  }
+
+  @Service
     public class DemoErrorHandler implements ErrorHandler{   
 
         @Override

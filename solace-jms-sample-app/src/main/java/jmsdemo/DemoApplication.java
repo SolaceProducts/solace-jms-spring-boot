@@ -1,7 +1,6 @@
 package jmsdemo;
 
 import java.util.Iterator;
-import java.util.List;
 
 import com.solace.services.core.model.SolaceServiceCredentials;
 import com.solace.spring.cloud.core.SolaceMessagingInfo;
@@ -39,7 +38,7 @@ public class DemoApplication {
         // Other beans that can be used together to create a customized JmsTemplate
         @Autowired private SolConnectionFactory solConnectionFactory;
         @Autowired private SpringSolJmsConnectionFactoryCloudFactory springSolJmsConnectionFactoryCloudFactory;
-        @Autowired private SolaceServiceCredentials solaceServiceCredentials;
+        @Autowired(required = false) private SolaceServiceCredentials solaceServiceCredentials;
 
         /*
         For backwards compatibility:
@@ -63,7 +62,7 @@ public class DemoApplication {
         private static final Logger logger = LoggerFactory.getLogger(MessageHandler.class);
 
         // Retrieve the name of the queue from the application.properties file
-        @JmsListener(destination = "${solace.jms.demoQueueName}")
+        @JmsListener(destination = "${solace.jms.demoQueueName}",containerFactory="cFactory",concurrency = "2")
         public void processMsg(Message msg) {
         	StringBuffer msgAsStr = new StringBuffer("============= Received \nHeaders:");
         	MessageHeaders hdrs = msg.getHeaders();

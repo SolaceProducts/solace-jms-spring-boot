@@ -9,11 +9,14 @@ import javax.jms.ConnectionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.jms.annotation.EnableJms;
 import org.springframework.jms.config.DefaultJmsListenerContainerFactory;
+import org.springframework.jms.config.SimpleJmsListenerContainerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ErrorHandler;
 
+@Configuration
 @EnableJms
 public class ConsumerConfiguration {
 
@@ -27,6 +30,14 @@ public class ConsumerConfiguration {
         factory.setErrorHandler(errorHandler);
         return factory;
     }
+
+  @Bean
+  public SimpleJmsListenerContainerFactory sFactory(ConnectionFactory connectionFactory, DemoErrorHandler errorHandler) {
+    SimpleJmsListenerContainerFactory factory = new SimpleJmsListenerContainerFactory();
+    factory.setConnectionFactory(connectionFactory);
+    factory.setErrorHandler(errorHandler);
+    return factory;
+  }
 
     @Service
     public class DemoErrorHandler implements ErrorHandler{   
