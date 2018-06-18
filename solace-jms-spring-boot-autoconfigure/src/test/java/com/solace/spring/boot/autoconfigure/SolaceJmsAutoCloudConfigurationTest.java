@@ -24,16 +24,18 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.json.JSONObject;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.contrib.java.lang.system.EnvironmentVariables;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.boot.autoconfigure.jms.JmsAutoConfiguration;
 import org.springframework.boot.test.util.EnvironmentTestUtils;
@@ -43,12 +45,23 @@ import org.springframework.core.env.Environment;
 import org.springframework.jms.core.JmsTemplate;
 
 import com.solace.spring.cloud.core.SolaceMessagingInfo;
-import com.solace.spring.boot.autoconfigure.CloudCondition;
-import com.solace.spring.boot.autoconfigure.SolaceJmsAutoCloudConfiguration;
 import com.solacesystems.jms.SolConnectionFactory;
 import com.solacesystems.jms.SpringSolJmsConnectionFactoryCloudFactory;
 
+@RunWith(Parameterized.class)
 public class SolaceJmsAutoCloudConfigurationTest {
+
+	protected static final Log logger = LogFactory.getLog(SolaceJmsAutoCloudConfigurationTest.class);
+
+	@Parameterized.Parameters(name = "{index}: {0}")
+	public static Object[] data() {
+		return new Object[] {
+				"solace-messaging",
+				"solace-pubsub"
+		};
+	}
+
+	private String serviceName;
 
 	@Rule
 	public final EnvironmentVariables environmentVariables = new EnvironmentVariables();
@@ -62,6 +75,15 @@ public class SolaceJmsAutoCloudConfigurationTest {
 	private static String CF_VCAP_SERVICES_OTHER = "VCAP_SERVICES={ otherService: [ { id: '1' } , { id: '2' } ]}";
 
 	CloudCondition cloudCondition = new CloudCondition();
+
+	public SolaceJmsAutoCloudConfigurationTest(String serviceName) {
+		this.serviceName = serviceName;
+	}
+
+	@Before
+	public void info() {
+		logger.info(String.format("Testing with service %s", serviceName));
+	}
 
 	@After
 	public void tearDown() {
@@ -145,7 +167,7 @@ public class SolaceJmsAutoCloudConfigurationTest {
 
 		String VCAP_SERVICES = env.getProperty("VCAP_SERVICES");
 		assertNotNull(VCAP_SERVICES);
-		assertFalse(VCAP_SERVICES.contains("solace-messaging"));
+		assertFalse(VCAP_SERVICES.contains(serviceName));
 
 		try {
 			this.context.getBean(SolConnectionFactory.class);
@@ -166,7 +188,7 @@ public class SolaceJmsAutoCloudConfigurationTest {
 
 		String VCAP_SERVICES = env.getProperty("VCAP_SERVICES");
 		assertNotNull(VCAP_SERVICES);
-		assertFalse(VCAP_SERVICES.contains("solace-messaging"));
+		assertFalse(VCAP_SERVICES.contains(serviceName));
 
 		try {
 			this.context.getBean(SpringSolJmsConnectionFactoryCloudFactory.class);
@@ -184,14 +206,14 @@ public class SolaceJmsAutoCloudConfigurationTest {
 		assertEquals("{}", System.getenv("VCAP_APPLICATION"));
 	}
 
-	private String addOneSolaceService() {
+	private String addOneSolaceService(String serviceLabel) {
 		// Make a service visible to the Cloud Connector, will end up using the
 		// SolaceMessagingInfoCreator
 
-		Map<String, Object> services = createOneService();
+		Map<String, Object> services = createOneService(serviceLabel);
 		JSONObject jsonMapObject = new JSONObject(services);
 		String JSONString = jsonMapObject.toString();
-		environmentVariables.set("VCAP_SERVICES", "{ \"solace-messaging\": [" + JSONString + "] }");
+		environmentVariables.set("VCAP_SERVICES", String.format("{ \"%s\": [" + JSONString + "] }", serviceLabel));
 		return JSONString;
 	}
 
@@ -200,8 +222,8 @@ public class SolaceJmsAutoCloudConfigurationTest {
 
 		makeCloudEnv();
 
-		String JSONString = addOneSolaceService();
-		String CF_VCAP_SERVICES = "VCAP_SERVICES={ \"solace-messaging\": [" + JSONString + "] }";
+		String JSONString = addOneSolaceService(serviceName);
+		String CF_VCAP_SERVICES = String.format("VCAP_SERVICES={ \"%s\": [%s] }", serviceName, JSONString);
 
 		load(EmptyCloudConfiguration.class, CF_CLOUD_APP_ENV, CF_VCAP_SERVICES);
 
@@ -213,7 +235,7 @@ public class SolaceJmsAutoCloudConfigurationTest {
 
 		String VCAP_SERVICES = env.getProperty("VCAP_SERVICES");
 		assertNotNull(VCAP_SERVICES);
-		assertTrue(VCAP_SERVICES.contains("solace-messaging"));
+		assertTrue(VCAP_SERVICES.contains(serviceName));
 
 		assertNotNull(this.context.getBean(SolConnectionFactory.class));
 	}
@@ -223,8 +245,8 @@ public class SolaceJmsAutoCloudConfigurationTest {
 
 		makeCloudEnv();
 
-		String JSONString = addOneSolaceService();
-		String CF_VCAP_SERVICES = "VCAP_SERVICES={ \"solace-messaging\": [" + JSONString + "] }";
+		String JSONString = addOneSolaceService(serviceName);
+		String CF_VCAP_SERVICES = String.format("VCAP_SERVICES={ \"%s\": [" + JSONString + "] }", serviceName);
 
 		load(EmptyCloudConfiguration.class, CF_CLOUD_APP_ENV, CF_VCAP_SERVICES);
 
@@ -236,7 +258,7 @@ public class SolaceJmsAutoCloudConfigurationTest {
 
 		String VCAP_SERVICES = env.getProperty("VCAP_SERVICES");
 		assertNotNull(VCAP_SERVICES);
-		assertTrue(VCAP_SERVICES.contains("solace-messaging"));
+		assertTrue(VCAP_SERVICES.contains(serviceName));
 
 		SpringSolJmsConnectionFactoryCloudFactory springSolConnectionFactoryCloudFactory = this.context
 				.getBean(SpringSolJmsConnectionFactoryCloudFactory.class);
@@ -257,8 +279,8 @@ public class SolaceJmsAutoCloudConfigurationTest {
 
 		makeCloudEnv();
 
-		String JSONString = addOneSolaceService();
-		String CF_VCAP_SERVICES = "VCAP_SERVICES={ \"solace-messaging\": [" + JSONString + "] }";
+		String JSONString = addOneSolaceService(serviceName);
+		String CF_VCAP_SERVICES = String.format("VCAP_SERVICES={ \"%s\": [" + JSONString + "] }", serviceName);
 
 		load(EmptyCloudConfiguration.class, CF_CLOUD_APP_ENV, CF_VCAP_SERVICES);
 
@@ -284,8 +306,8 @@ public class SolaceJmsAutoCloudConfigurationTest {
 	public void isCloudConfiguredBySolaceMessagingInfoAndOtherProperties() {
 		makeCloudEnv();
 
-		String JSONString = addOneSolaceService();
-		String CF_VCAP_SERVICES = "VCAP_SERVICES={ \"solace-messaging\": [" + JSONString + "] }";
+		String JSONString = addOneSolaceService(serviceName);
+		String CF_VCAP_SERVICES = String.format("VCAP_SERVICES={ \"%s\": [" + JSONString + "] }", serviceName);
 
 		load(EmptyCloudConfiguration.class, CF_CLOUD_APP_ENV, CF_VCAP_SERVICES, "solace.jms.host=192.168.1.80:55500",
 				"solace.jms.clientUsername=bob", "solace.jms.clientPassword=password", "solace.jms.msgVpn=newVpn");
@@ -314,7 +336,7 @@ public class SolaceJmsAutoCloudConfigurationTest {
 
 		makeCloudEnv();
 
-		Map<String, Object> services = createOneService();
+		Map<String, Object> services = createOneService(serviceName);
 		@SuppressWarnings("unchecked")
 		Map<String, Object> credentials = (Map<String, Object>) services.get("credentials");
 		credentials.remove("clientUsername");
@@ -322,9 +344,9 @@ public class SolaceJmsAutoCloudConfigurationTest {
 
 		JSONObject jsonMapObject = new JSONObject(services);
 		String JSONString = jsonMapObject.toString();
-		environmentVariables.set("VCAP_SERVICES", "{ \"solace-messaging\": [" + JSONString + "] }");
+		environmentVariables.set("VCAP_SERVICES", String.format("{ \"%s\": [" + JSONString + "] }", serviceName));
 
-		String CF_VCAP_SERVICES = "VCAP_SERVICES={ \"solace-messaging\": [" + JSONString + "] }";
+		String CF_VCAP_SERVICES = String.format("VCAP_SERVICES={ \"%s\": [" + JSONString + "] }", serviceName);
 
 		load(EmptyCloudConfiguration.class, CF_CLOUD_APP_ENV, CF_VCAP_SERVICES, "solace.jms.host=192.168.1.80:55500",
 				"solace.jms.clientUsername=bob", "solace.jms.clientPassword=password", "solace.jms.msgVpn=newVpn");
@@ -361,7 +383,7 @@ public class SolaceJmsAutoCloudConfigurationTest {
 		this.context = applicationContext;
 	}
 
-	private Map<String, Object> createOneService() {
+	private Map<String, Object> createOneService(String serviceLabel) {
 		Map<String, Object> exVcapServices = new HashMap<String, Object>();
 
 		Map<String, Object> exCred = new HashMap<String, Object>();
@@ -390,13 +412,13 @@ public class SolaceJmsAutoCloudConfigurationTest {
 		exCred.put("activeManagementHostname", "vmr-medium-web");
 
 		exVcapServices.put("credentials", exCred);
-		exVcapServices.put("label", "solace-messaging");
+		exVcapServices.put("label", serviceLabel);
 		exVcapServices.put("name", "test-service-instance-name");
 		exVcapServices.put("plan", "vmr-shared");
 		exVcapServices.put("provider", "Solace Systems");
 		// no need to check for tags in terms of validation. It's more for
 		exVcapServices.put("tags",
-				Arrays.asList("solace", "solace-messaging", "rest", "mqtt", "mq", "queue", "jms", "messaging", "amqp"));
+				Arrays.asList("solace", serviceLabel, "rest", "mqtt", "mq", "queue", "jms", "messaging", "amqp"));
 
 		return exVcapServices;
 	}
