@@ -21,37 +21,64 @@ package com.solacesystems.jms;
 
 import java.util.List;
 
+import com.solace.services.core.model.SolaceServiceCredentials;
 import com.solace.spring.cloud.core.SolaceMessagingInfo;
-import com.solacesystems.jms.SolConnectionFactory;
 
 /**
- * A Factory for SolConnectionFactory to Support Cloud Environments having
+ * A Factory for {@link SolConnectionFactory} to Support Cloud Environments having
  * multiple solace-messaging services.
  */
 public interface SpringSolJmsConnectionFactoryCloudFactory {
+	/**
+	 * Gets the first detected {@link SolaceServiceCredentials}.
+	 *
+	 * @return A Solace Messaging service
+	 */
+	SolaceServiceCredentials findFirstSolaceServiceCredentials();
 
 	/**
-	 * Lists All Cloud Environment detected Solace Messaging services
-	 * 
+	 * Lists All Cloud Environment detected Solace Messaging services.
+	 *
 	 * @return List of all Cloud Environment detected Solace Messaging services
 	 */
-	public List<SolaceMessagingInfo> getSolaceMessagingInfos();
+	List<SolaceServiceCredentials> getSolaceServiceCredentials();
 
 	/**
-	 * Returns a SolConnectionFactory based on the first detected
-	 * SolaceMessagingInfo
-	 * 
-	 * @return SolConnectionFactory based on the first detected
-	 *         SolaceMessagingInfo
+	 * Returns a {@link SolConnectionFactory} based on the first detected {@link SolaceServiceCredentials}.
+	 *
+	 * @return {@link SolConnectionFactory} based on the first detected {@link SolaceServiceCredentials}
 	 */
-	public SolConnectionFactory getSolConnectionFactory();
+	SolConnectionFactory getSolConnectionFactory();
 
 	/**
-	 * Returns a SolConnectionFactory based on the given SolaceMessagingInfo
-	 * 
-	 * @param solaceMessagingInfo
-	 * @return SolConnectionFactory based on the given SolaceMessagingInfo
+	 * Returns a {@link SolConnectionFactory} based on the {@link SolaceServiceCredentials}
+	 * identified by the given ID.
+	 *
+	 * @param id The Solace Messaging service's ID
+	 * @return {@link SolConnectionFactory} with the given Solace Messaging service ID,
+	 * otherwise null if the service cannot be found
 	 */
-	public SolConnectionFactory getSolConnectionFactory(SolaceMessagingInfo solaceMessagingInfo);
+	SolConnectionFactory getSolConnectionFactory(String id);
 
+	/**
+	 * Returns a {@link SolConnectionFactory} based on the given {@link SolaceServiceCredentials}.
+	 *
+	 * @param solaceServiceCredentials The credentials to an existing Solace Messaging service
+	 * @return {@link SolConnectionFactory} based on the given {@link SolaceServiceCredentials},
+	 * otherwise an application.properties based {@link SolConnectionFactory}
+	 */
+	SolConnectionFactory getSolConnectionFactory(SolaceServiceCredentials solaceServiceCredentials);
+
+	/**
+	 * Lists All Cloud Environment detected Solace Messaging services.
+	 *
+	 * @deprecated As of 1.1.0, usage of {@link SolaceMessagingInfo}
+	 * was replaced by its interface, {@link SolaceServiceCredentials}.
+	 * Use {@link #getSolaceServiceCredentials()} instead.
+	 *
+	 * @return If in a Cloud Foundry environment, list of all Cloud Environment detected Solace Messaging services,
+	 * otherwise null
+	 */
+	@Deprecated
+	List<SolaceMessagingInfo> getSolaceMessagingInfos();
 }

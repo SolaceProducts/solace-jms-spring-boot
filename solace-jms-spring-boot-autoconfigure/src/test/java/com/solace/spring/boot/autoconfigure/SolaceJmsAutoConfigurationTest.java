@@ -18,33 +18,27 @@
  */
 package com.solace.spring.boot.autoconfigure;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import org.junit.After;
+import com.solace.services.core.model.SolaceServiceCredentials;
+import com.solacesystems.jms.SolConnectionFactory;
+import com.solacesystems.jms.SolConnectionFactoryImpl;
+import com.solacesystems.jms.SpringSolJmsConnectionFactoryCloudFactory;
 import org.junit.Test;
-import org.springframework.boot.autoconfigure.jms.JmsAutoConfiguration;
-import org.springframework.boot.test.util.EnvironmentTestUtils;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.jms.core.JmsTemplate;
 
-import com.solace.spring.boot.autoconfigure.SolaceJmsAutoConfiguration;
-import com.solacesystems.jms.SolConnectionFactoryImpl;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
-public class SolaceJmsAutoConfigurationTest {
-
-	private AnnotationConfigApplicationContext context;
-
-	@After
-	public void tearDown() {
-		if (this.context != null) {
-			this.context.close();
-		}
+public class SolaceJmsAutoConfigurationTest extends SolaceJmsAutoConfigurationTestBase {
+	public SolaceJmsAutoConfigurationTest() {
+		super(SolaceJmsAutoConfiguration.class);
 	}
 
 	@Test
 	public void defaultNativeConnectionFactory() {
-		load(EmptyConfiguration.class, "");
+		load("");
 		JmsTemplate jmsTemplate = this.context.getBean(JmsTemplate.class);
 		SolConnectionFactoryImpl connectionFactory = this.context
 				.getBean(SolConnectionFactoryImpl.class);
@@ -58,12 +52,11 @@ public class SolaceJmsAutoConfigurationTest {
 
 	@Test
 	public void customNativeConnectionFactory() {
-		load(EmptyConfiguration.class, "solace.jms.host=192.168.1.80:55500",
+		load("solace.jms.host=192.168.1.80:55500",
 				"solace.jms.clientUsername=bob", "solace.jms.clientPassword=password",
 				"solace.jms.msgVpn=newVpn");
 		JmsTemplate jmsTemplate = this.context.getBean(JmsTemplate.class);
-		SolConnectionFactoryImpl connectionFactory = this.context
-				.getBean(SolConnectionFactoryImpl.class);
+		SolConnectionFactoryImpl connectionFactory = this.context.getBean(SolConnectionFactoryImpl.class);
 		assertEquals(jmsTemplate.getConnectionFactory(), connectionFactory);
 		assertEquals("tcp://192.168.1.80:55500", connectionFactory.getHost());
         assertEquals("newVpn", connectionFactory.getVPN());
@@ -72,19 +65,37 @@ public class SolaceJmsAutoConfigurationTest {
         assertFalse(connectionFactory.getDirectTransport());
 	}
 
+    @Test
+    public void externallyLoadedServiceProperties() {
+        // Testing one type of externally loaded service is good enough
+        // The loader has its own tests for the other scenarios
+        String ENV_SOLCAP_SERVICES = "SOLCAP_SERVICES";
 
+        load(String.format("%s={ \"solace-messaging\": [%s] }",
+                ENV_SOLCAP_SERVICES, addOneSolaceService(ENV_SOLCAP_SERVICES)));
 
-	@Configuration
-	static class EmptyConfiguration {}
+        String solaceManifest = context.getEnvironment().getProperty(ENV_SOLCAP_SERVICES);
+        assertNotNull(solaceManifest);
+        assertTrue(solaceManifest.contains("solace-messaging"));
 
-	private void load(Class<?> config, String... environment) {
-		AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext();
-		EnvironmentTestUtils.addEnvironment(applicationContext, environment);
-		applicationContext.register(config);
-		applicationContext.register(SolaceJmsAutoConfiguration.class,
-				JmsAutoConfiguration.class);
-		applicationContext.refresh();
-		this.context = applicationContext;
+        assertNotNull(this.context.getBean(SolConnectionFactory.class));
+        assertNotNull(this.context.getBean(SpringSolJmsConnectionFactoryCloudFactory.class));
+        assertNotNull(this.context.getBean(SolaceServiceCredentials.class));
+    }
+
+	@Test
+	public void noExternallyLoadedServiceProperties() {
+		// Testing one type of externally loaded service is good enough
+		// The loader has its own tests for the other scenarios
+		String ENV_SOLCAP_SERVICES = "SOLCAP_SERVICES";
+		load(String.format("%s={ \"solace-messaging\": [] }", ENV_SOLCAP_SERVICES));
+
+		String solaceManifest = context.getEnvironment().getProperty(ENV_SOLCAP_SERVICES);
+		assertNotNull(solaceManifest);
+		assertTrue(solaceManifest.contains("solace-messaging"));
+
+		assertNotNull(this.context.getBean(SolConnectionFactory.class));
+		assertNotNull(this.context.getBean(SpringSolJmsConnectionFactoryCloudFactory.class));
+		assertNull(this.context.getBean(SolaceServiceCredentials.class));
 	}
-
 }

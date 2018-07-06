@@ -18,6 +18,7 @@
  */
 package com.solace.spring.boot.autoconfigure;
 
+<<<<<<< HEAD
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -34,16 +35,22 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.contrib.java.lang.system.EnvironmentVariables;
+=======
+import com.solace.services.core.model.SolaceServiceCredentials;
+import com.solace.spring.cloud.core.SolaceMessagingInfo;
+import com.solacesystems.jms.SolConnectionFactory;
+import com.solacesystems.jms.SpringSolJmsConnectionFactoryCloudFactory;
+import org.json.JSONObject;
+import org.junit.Test;
+>>>>>>> upstream-master
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
-import org.springframework.boot.autoconfigure.jms.JmsAutoConfiguration;
-import org.springframework.boot.test.util.EnvironmentTestUtils;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.core.ResolvableType;
 import org.springframework.core.env.Environment;
 import org.springframework.jms.core.JmsTemplate;
 
+<<<<<<< HEAD
 import com.solace.spring.cloud.core.SolaceMessagingInfo;
 import com.solacesystems.jms.SolConnectionFactory;
 import com.solacesystems.jms.SpringSolJmsConnectionFactoryCloudFactory;
@@ -65,8 +72,24 @@ public class SolaceJmsAutoCloudConfigurationTest {
 
 	@Rule
 	public final EnvironmentVariables environmentVariables = new EnvironmentVariables();
+=======
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
-	private AnnotationConfigApplicationContext context;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import org.junit.runners.Parameterized.Parameters;
+import org.junit.runners.Parameterized.Parameter;
+>>>>>>> upstream-master
+
+@RunWith(Parameterized.class)
+public class SolaceJmsAutoCloudConfigurationTest<T> extends SolaceJmsAutoConfigurationTestBase {
 
 	// Just enough to satisfy the Cloud Condition we need
 	private static String CF_CLOUD_APP_ENV = "VCAP_APPLICATION={}";
@@ -74,6 +97,8 @@ public class SolaceJmsAutoCloudConfigurationTest {
 	// Some other Service
 	private static String CF_VCAP_SERVICES_OTHER = "VCAP_SERVICES={ otherService: [ { id: '1' } , { id: '2' } ]}";
 
+    @Parameter(0) public String beanClassName;
+    @Parameter(1) public Class<T> beanClass;
 	CloudCondition cloudCondition = new CloudCondition();
 
 	public SolaceJmsAutoCloudConfigurationTest(String serviceName) {
@@ -92,33 +117,34 @@ public class SolaceJmsAutoCloudConfigurationTest {
 		}
 	}
 
-	@Test(expected = NoSuchBeanDefinitionException.class)
-	public void notCloudNoSolConnectionFactory() throws NoSuchBeanDefinitionException {
-		try {
-			load(EmptyCloudConfiguration.class, "");
+	public SolaceJmsAutoCloudConfigurationTest() {
+		super(SolaceJmsAutoCloudConfiguration.class);
+	}
 
-			this.context.getBean(SolConnectionFactory.class);
+    @Parameters(name = "{0}")
+    public static Collection<Object[]> parameterData() {
+        Set<ResolvableType> classes = new HashSet<>();
+        classes.add(ResolvableType.forClass(SpringSolJmsConnectionFactoryCloudFactory.class));
+        classes.add(ResolvableType.forClass(SolConnectionFactory.class));
+        classes.add(ResolvableType.forClass(SolaceServiceCredentials.class));
+        classes.add(ResolvableType.forClass(SolaceMessagingInfo.class));
+        return getTestParameters(classes);
+    }
+
+	@Test(expected = NoSuchBeanDefinitionException.class)
+	public void noBeanNotCloud() throws NoSuchBeanDefinitionException {
+		try {
+			load("");
+			this.context.getBean(beanClass);
 		} catch (NoSuchBeanDefinitionException e) {
-			assertTrue(e.getBeanType().isAssignableFrom(SolConnectionFactory.class));
+			assertTrue(e.getBeanType().isAssignableFrom(beanClass));
 			throw e;
 		}
 	}
 
 	@Test(expected = NoSuchBeanDefinitionException.class)
-	public void notCloudNoSpringSolConnectionFactoryCloudFactory() throws NoSuchBeanDefinitionException {
-		load(EmptyCloudConfiguration.class, "");
-
-		try {
-			this.context.getBean(SpringSolJmsConnectionFactoryCloudFactory.class);
-		} catch (NoSuchBeanDefinitionException e) {
-			assertTrue(e.getBeanType().isAssignableFrom(SpringSolJmsConnectionFactoryCloudFactory.class));
-			throw e;
-		}
-	}
-
-	@Test(expected = NoSuchBeanDefinitionException.class)
-	public void isCloudNoServiceNoSolConnectionFactory() throws NoSuchBeanDefinitionException {
-		load(EmptyCloudConfiguration.class, CF_CLOUD_APP_ENV);
+	public void noBeanIsCloudNoService() throws NoSuchBeanDefinitionException {
+		load(CF_CLOUD_APP_ENV);
 
 		Environment env = context.getEnvironment();
 		String VCAP_APPLICATION = env.getProperty("VCAP_APPLICATION");
@@ -129,6 +155,7 @@ public class SolaceJmsAutoCloudConfigurationTest {
 		assertNull(VCAP_SERVICES);
 
 		try {
+<<<<<<< HEAD
 			this.context.getBean(SolConnectionFactory.class);
 		} catch (NoSuchBeanDefinitionException e) {
 			assertTrue(e.getBeanType().isAssignableFrom(SolConnectionFactory.class));
@@ -171,15 +198,18 @@ public class SolaceJmsAutoCloudConfigurationTest {
 
 		try {
 			this.context.getBean(SolConnectionFactory.class);
+=======
+			this.context.getBean(beanClass);
+>>>>>>> upstream-master
 		} catch (NoSuchBeanDefinitionException e) {
-			assertTrue(e.getBeanType().isAssignableFrom(SolConnectionFactory.class));
+			assertTrue(e.getBeanType().isAssignableFrom(beanClass));
 			throw e;
 		}
 	}
 
 	@Test(expected = NoSuchBeanDefinitionException.class)
-	public void isCloudWrongServiceNoSpringJCSMPFactoryCloudFactory() throws NoSuchBeanDefinitionException {
-		load(EmptyCloudConfiguration.class, CF_CLOUD_APP_ENV, CF_VCAP_SERVICES_OTHER);
+	public void noBeanIsCloudWrongService() throws NoSuchBeanDefinitionException {
+		load(CF_CLOUD_APP_ENV, CF_VCAP_SERVICES_OTHER);
 
 		Environment env = context.getEnvironment();
 		String VCAP_APPLICATION = env.getProperty("VCAP_APPLICATION");
@@ -191,12 +221,11 @@ public class SolaceJmsAutoCloudConfigurationTest {
 		assertFalse(VCAP_SERVICES.contains(serviceName));
 
 		try {
-			this.context.getBean(SpringSolJmsConnectionFactoryCloudFactory.class);
+			this.context.getBean(beanClass);
 		} catch (NoSuchBeanDefinitionException e) {
-			assertTrue(e.getBeanType().isAssignableFrom(SpringSolJmsConnectionFactoryCloudFactory.class));
+			assertTrue(e.getBeanType().isAssignableFrom(beanClass));
 			throw e;
 		}
-
 	}
 
 	private void makeCloudEnv() {
@@ -206,6 +235,7 @@ public class SolaceJmsAutoCloudConfigurationTest {
 		assertEquals("{}", System.getenv("VCAP_APPLICATION"));
 	}
 
+<<<<<<< HEAD
 	private String addOneSolaceService(String serviceLabel) {
 		// Make a service visible to the Cloud Connector, will end up using the
 		// SolaceMessagingInfoCreator
@@ -217,15 +247,22 @@ public class SolaceJmsAutoCloudConfigurationTest {
 		return JSONString;
 	}
 
+=======
+>>>>>>> upstream-master
 	@Test
-	public void isCloudHasServiceSolConnectionFactory() throws NoSuchBeanDefinitionException {
+	public void hasBeanIsCloudHasService() throws NoSuchBeanDefinitionException {
 
 		makeCloudEnv();
 
+<<<<<<< HEAD
 		String JSONString = addOneSolaceService(serviceName);
 		String CF_VCAP_SERVICES = String.format("VCAP_SERVICES={ \"%s\": [%s] }", serviceName, JSONString);
+=======
+		String JSONString = addOneSolaceService("VCAP_SERVICES");
+		String CF_VCAP_SERVICES = "VCAP_SERVICES={ \"solace-messaging\": [" + JSONString + "] }";
+>>>>>>> upstream-master
 
-		load(EmptyCloudConfiguration.class, CF_CLOUD_APP_ENV, CF_VCAP_SERVICES);
+		load(CF_CLOUD_APP_ENV, CF_VCAP_SERVICES);
 
 		Environment env = context.getEnvironment();
 
@@ -237,12 +274,9 @@ public class SolaceJmsAutoCloudConfigurationTest {
 		assertNotNull(VCAP_SERVICES);
 		assertTrue(VCAP_SERVICES.contains(serviceName));
 
-		assertNotNull(this.context.getBean(SolConnectionFactory.class));
-	}
+		validateBackwardsCompatibility();
 
-	@Test
-	public void isCloudHasServiceSpringSolConnectionFactoryCloudFactory() throws NoSuchBeanDefinitionException {
-
+<<<<<<< HEAD
 		makeCloudEnv();
 
 		String JSONString = addOneSolaceService(serviceName);
@@ -271,7 +305,20 @@ public class SolaceJmsAutoCloudConfigurationTest {
 		assertNotNull(availableServices);
 
 		assertEquals(1, availableServices.size());
+=======
+		T bean = this.context.getBean(beanClass);
+		assertNotNull(bean);
+>>>>>>> upstream-master
 
+		if (beanClass.equals(SpringSolJmsConnectionFactoryCloudFactory.class)) {
+            SpringSolJmsConnectionFactoryCloudFactory springSolConnectionFactoryCloudFactory =
+                    (SpringSolJmsConnectionFactoryCloudFactory) bean;
+            assertNotNull(springSolConnectionFactoryCloudFactory.getSolConnectionFactory());
+            List<SolaceServiceCredentials> availableServices = springSolConnectionFactoryCloudFactory
+                    .getSolaceServiceCredentials();
+            assertNotNull(availableServices);
+            assertEquals(1,availableServices.size());
+        }
 	}
 
 	@Test
@@ -279,10 +326,15 @@ public class SolaceJmsAutoCloudConfigurationTest {
 
 		makeCloudEnv();
 
+<<<<<<< HEAD
 		String JSONString = addOneSolaceService(serviceName);
 		String CF_VCAP_SERVICES = String.format("VCAP_SERVICES={ \"%s\": [" + JSONString + "] }", serviceName);
+=======
+		String JSONString = addOneSolaceService("VCAP_SERVICES");
+		String CF_VCAP_SERVICES = "VCAP_SERVICES={ \"solace-messaging\": [" + JSONString + "] }";
+>>>>>>> upstream-master
 
-		load(EmptyCloudConfiguration.class, CF_CLOUD_APP_ENV, CF_VCAP_SERVICES);
+		load(CF_CLOUD_APP_ENV, CF_VCAP_SERVICES);
 
 		SpringSolJmsConnectionFactoryCloudFactory springSolConnectionFactoryCloudFactory = this.context
 				.getBean(SpringSolJmsConnectionFactoryCloudFactory.class);
@@ -306,10 +358,15 @@ public class SolaceJmsAutoCloudConfigurationTest {
 	public void isCloudConfiguredBySolaceMessagingInfoAndOtherProperties() {
 		makeCloudEnv();
 
+<<<<<<< HEAD
 		String JSONString = addOneSolaceService(serviceName);
 		String CF_VCAP_SERVICES = String.format("VCAP_SERVICES={ \"%s\": [" + JSONString + "] }", serviceName);
+=======
+		String JSONString = addOneSolaceService("VCAP_SERVICES");
+		String CF_VCAP_SERVICES = "VCAP_SERVICES={ \"solace-messaging\": [" + JSONString + "] }";
+>>>>>>> upstream-master
 
-		load(EmptyCloudConfiguration.class, CF_CLOUD_APP_ENV, CF_VCAP_SERVICES, "solace.jms.host=192.168.1.80:55500",
+		load(CF_CLOUD_APP_ENV, CF_VCAP_SERVICES, "solace.jms.host=192.168.1.80:55500",
 				"solace.jms.clientUsername=bob", "solace.jms.clientPassword=password", "solace.jms.msgVpn=newVpn");
 
 		SpringSolJmsConnectionFactoryCloudFactory springSolConnectionFactoryCloudFactory = this.context
@@ -348,7 +405,7 @@ public class SolaceJmsAutoCloudConfigurationTest {
 
 		String CF_VCAP_SERVICES = String.format("VCAP_SERVICES={ \"%s\": [" + JSONString + "] }", serviceName);
 
-		load(EmptyCloudConfiguration.class, CF_CLOUD_APP_ENV, CF_VCAP_SERVICES, "solace.jms.host=192.168.1.80:55500",
+		load(CF_CLOUD_APP_ENV, CF_VCAP_SERVICES, "solace.jms.host=192.168.1.80:55500",
 				"solace.jms.clientUsername=bob", "solace.jms.clientPassword=password", "solace.jms.msgVpn=newVpn");
 
 		SpringSolJmsConnectionFactoryCloudFactory springSolConnectionFactoryCloudFactory = this.context
@@ -370,19 +427,15 @@ public class SolaceJmsAutoCloudConfigurationTest {
 		assertFalse(solConnectionFactory.getDirectTransport());
 	}
 
-	@Configuration
-	static class EmptyCloudConfiguration {
-	}
+	private void validateBackwardsCompatibility() {
+		//Expects SolaceMessagingInfo bean to be annotated with @Primary
 
-	private void load(Class<?> config, String... environment) {
-		AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext();
-		EnvironmentTestUtils.addEnvironment(applicationContext, environment);
-		applicationContext.register(config);
-		applicationContext.register(SolaceJmsAutoCloudConfiguration.class, JmsAutoConfiguration.class);
-		applicationContext.refresh();
-		this.context = applicationContext;
-	}
+		assertEquals(2, this.context.getBeanNamesForType(SolaceServiceCredentials.class).length);
+		assertEquals(2, this.context.getBeanNamesForType(SolaceMessagingInfo.class).length);
+		SolaceServiceCredentials ssc = this.context.getBean(SolaceServiceCredentials.class);
+		SolaceMessagingInfo smi = this.context.getBean(SolaceMessagingInfo.class);
 
+<<<<<<< HEAD
 	private Map<String, Object> createOneService(String serviceLabel) {
 		Map<String, Object> exVcapServices = new HashMap<String, Object>();
 
@@ -422,5 +475,13 @@ public class SolaceJmsAutoCloudConfigurationTest {
 
 		return exVcapServices;
 	}
+=======
+		//Primary child class always supersedes any parent
+		assertTrue(ssc.getClass().isAssignableFrom(SolaceMessagingInfo.class));
+		assertTrue(!ssc.getClass().isAssignableFrom(SolaceServiceCredentials.class));
+>>>>>>> upstream-master
 
+		assertTrue(smi.getClass().isAssignableFrom(SolaceMessagingInfo.class));
+		assertTrue(!smi.getClass().isAssignableFrom(SolaceServiceCredentials.class));
+	}
 }

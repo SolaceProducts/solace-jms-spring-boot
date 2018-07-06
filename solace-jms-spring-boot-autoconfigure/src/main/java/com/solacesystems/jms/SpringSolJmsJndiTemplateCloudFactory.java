@@ -21,38 +21,66 @@ package com.solacesystems.jms;
 
 import java.util.List;
 
+import com.solace.services.core.model.SolaceServiceCredentials;
+import com.solace.spring.cloud.core.SolaceMessagingInfo;
 import org.springframework.jndi.JndiTemplate;
 
-import com.solace.spring.cloud.core.SolaceMessagingInfo;
-
 /**
- * A Factory for JndiTemplate to Support Cloud Environments having
+ * A Factory for {@link JndiTemplate} to Support Cloud Environments having
  * multiple solace-messaging services.
  */
 public interface SpringSolJmsJndiTemplateCloudFactory {
 
 	/**
-	 * Lists All Cloud Environment detected Solace Messaging services
-	 * 
+	 * Gets the first detected {@link SolaceServiceCredentials}.
+	 *
+	 * @return A Solace Messaging service
+	 */
+	SolaceServiceCredentials findFirstSolaceServiceCredentials();
+
+	/**
+	 * Lists All Cloud Environment detected Solace Messaging services.
+	 *
 	 * @return List of all Cloud Environment detected Solace Messaging services
 	 */
-	public List<SolaceMessagingInfo> getSolaceMessagingInfos();
+	List<SolaceServiceCredentials> getSolaceServiceCredentials();
 
 	/**
-	 * Returns a SolConnectionFactory based on the first detected
-	 * SolaceMessagingInfo
-	 * 
-	 * @return SolConnectionFactory based on the first detected
-	 *         SolaceMessagingInfo
+	 * Returns a {@link JndiTemplate} based on the first detected {@link SolaceServiceCredentials}.
+	 *
+	 * @return {@link JndiTemplate} based on the first detected {@link SolaceServiceCredentials}
 	 */
-	public JndiTemplate getJndiTemplate();
+	JndiTemplate getJndiTemplate();
 
 	/**
-	 * Returns a SolConnectionFactory based on the given SolaceMessagingInfo
-	 * 
-	 * @param solaceMessagingInfo
-	 * @return SolConnectionFactory based on the given SolaceMessagingInfo
+	 * Returns a {@link JndiTemplate} based on the {@link SolaceServiceCredentials}
+	 * identified by the given ID.
+	 *
+	 * @param id The Solace Messaging service's ID
+	 * @return {@link JndiTemplate} with the given Solace Messaging service ID,
+	 * otherwise null if the service cannot be found
 	 */
-	public JndiTemplate getJndiTemplate(SolaceMessagingInfo solaceMessagingInfo);
+	JndiTemplate getJndiTemplate(String id);
 
+	/**
+	 * Returns a {@link JndiTemplate} based on the given {@link SolaceServiceCredentials}.
+	 *
+	 * @param solaceServiceCredentials The credentials to an existing Solace Messaging service
+	 * @return {@link JndiTemplate} based on the given {@link SolaceServiceCredentials},
+	 * otherwise an application.properties based {@link JndiTemplate}
+	 */
+	JndiTemplate getJndiTemplate(SolaceServiceCredentials solaceServiceCredentials);
+
+	/**
+	 * Lists All Cloud Environment detected Solace Messaging services.
+	 *
+	 * @deprecated As of 1.1.0, usage of {@link SolaceMessagingInfo}
+	 * was replaced by its interface, {@link SolaceServiceCredentials}.
+	 * Use {@link #getSolaceServiceCredentials()} instead.
+	 *
+	 * @return If in a Cloud Foundry environment, list of all Cloud Environment detected Solace Messaging services,
+	 * otherwise null
+	 */
+	@Deprecated
+	List<SolaceMessagingInfo> getSolaceMessagingInfos();
 }
