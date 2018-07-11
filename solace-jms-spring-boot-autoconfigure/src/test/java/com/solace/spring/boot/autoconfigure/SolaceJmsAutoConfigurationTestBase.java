@@ -65,13 +65,13 @@ public abstract class SolaceJmsAutoConfigurationTestBase {
         exCred.put("activeManagementHostname", "vmr-medium-web");
 
         exVcapServices.put("credentials", exCred);
-        exVcapServices.put("label", "solace-messaging");
+        exVcapServices.put("label", "solace-pubsub");
         exVcapServices.put("name", "test-service-instance-name");
         exVcapServices.put("plan", "vmr-shared");
         exVcapServices.put("provider", "Solace Systems");
         // no need to check for tags in terms of validation. It's more for
         exVcapServices.put("tags",
-                Arrays.asList("solace", "solace-messaging", "rest", "mqtt", "mq", "queue", "jms", "messaging", "amqp"));
+                Arrays.asList("solace", "solace-pubsub", "rest", "mqtt", "mq", "queue", "jms", "messaging", "amqp"));
 
         return exVcapServices;
     }
@@ -83,7 +83,7 @@ public abstract class SolaceJmsAutoConfigurationTestBase {
         Map<String, Object> services = createOneService();
         JSONObject jsonMapObject = new JSONObject(services);
         String JSONString = jsonMapObject.toString();
-        environmentVariables.set(envName, "{ \"solace-messaging\": [" + JSONString + "] }");
+        environmentVariables.set(envName, "{ \"solace-pubsub\": [" + JSONString + "] }");
         return JSONString;
     }
 
