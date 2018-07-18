@@ -26,20 +26,20 @@ import com.solace.spring.cloud.core.SolaceMessagingInfo;
 
 /**
  * A Factory for {@link SolConnectionFactory} to Support Cloud Environments having
- * multiple solace-messaging services.
+ * multiple Solace PubSub+ services.
  */
 public interface SpringSolJmsConnectionFactoryCloudFactory {
 	/**
 	 * Gets the first detected {@link SolaceServiceCredentials}.
 	 *
-	 * @return A Solace Messaging service
+	 * @return A Solace PubSub+ service
 	 */
 	SolaceServiceCredentials findFirstSolaceServiceCredentials();
 
 	/**
-	 * Lists All Cloud Environment detected Solace Messaging services.
+	 * Lists All Cloud Environment detected Solace PubSub+ services.
 	 *
-	 * @return List of all Cloud Environment detected Solace Messaging services
+	 * @return List of all Cloud Environment detected Solace PubSub+ services
 	 */
 	List<SolaceServiceCredentials> getSolaceServiceCredentials();
 
@@ -54,8 +54,8 @@ public interface SpringSolJmsConnectionFactoryCloudFactory {
 	 * Returns a {@link SolConnectionFactory} based on the {@link SolaceServiceCredentials}
 	 * identified by the given ID.
 	 *
-	 * @param id The Solace Messaging service's ID
-	 * @return {@link SolConnectionFactory} with the given Solace Messaging service ID,
+	 * @param id The Solace PubSub+ service's ID
+	 * @return {@link SolConnectionFactory} with the given Solace PubSub+ service ID,
 	 * otherwise null if the service cannot be found
 	 */
 	SolConnectionFactory getSolConnectionFactory(String id);
@@ -63,20 +63,20 @@ public interface SpringSolJmsConnectionFactoryCloudFactory {
 	/**
 	 * Returns a {@link SolConnectionFactory} based on the given {@link SolaceServiceCredentials}.
 	 *
-	 * @param solaceServiceCredentials The credentials to an existing Solace Messaging service
+	 * @param solaceServiceCredentials The credentials to an existing Solace PubSub+ service
 	 * @return {@link SolConnectionFactory} based on the given {@link SolaceServiceCredentials},
 	 * otherwise an application.properties based {@link SolConnectionFactory}
 	 */
 	SolConnectionFactory getSolConnectionFactory(SolaceServiceCredentials solaceServiceCredentials);
 
 	/**
-	 * Lists All Cloud Environment detected Solace Messaging services.
+	 * Lists All Cloud Environment detected Solace PubSub+ services.
 	 *
 	 * @deprecated As of 1.1.0, usage of {@link SolaceMessagingInfo}
 	 * was replaced by its interface, {@link SolaceServiceCredentials}.
 	 * Use {@link #getSolaceServiceCredentials()} instead.
 	 *
-	 * @return If in a Cloud Foundry environment, list of all Cloud Environment detected Solace Messaging services,
+	 * @return If in a Cloud Foundry environment, list of all Cloud Environment detected Solace PubSub+ services,
 	 * otherwise null
 	 */
 	@Deprecated

@@ -72,7 +72,7 @@ public class SolaceJndiAutoCloudConfiguration extends SolaceJndiAutoConfiguratio
 	 * was replaced by its interface, {@link SolaceServiceCredentials}.
 	 * Use {@link #findFirstSolaceServiceCredentials()} instead.
 	 *
-	 * @return If in a Cloud Foundry environment, a Solace Messaging service is returned, otherwise null
+	 * @return If in a Cloud Foundry environment, a Solace PubSub+ service is returned, otherwise null
 	 */
 	@Deprecated
 	@Bean @Primary
@@ -86,7 +86,7 @@ public class SolaceJndiAutoCloudConfiguration extends SolaceJndiAutoConfiguratio
 			// selection
 			if (serviceInfo instanceof SolaceMessagingInfo) {
 				solacemessaging = (SolaceMessagingInfo) serviceInfo;
-				logger.info("Found Cloud Solace Messaging Service Instance Id: " + solacemessaging.getId());
+				logger.info("Found Cloud Solace PubSub+ Service Instance Id: " + solacemessaging.getId());
 				break;
 			}
 		}
@@ -94,7 +94,7 @@ public class SolaceJndiAutoCloudConfiguration extends SolaceJndiAutoConfiguratio
 		if (solacemessaging == null) {
 			// The CloudCondition should shield from this happening, should not
 			// arrive to this state.
-			logger.error("Cloud Solace Messaging Info was not found, cannot auto-configure");
+			logger.error("Cloud Solace PubSub+ Info was not found, cannot auto-configure");
 			throw new IllegalStateException(
 					"Unable to create SolConnectionFactory did not find SolaceMessagingInfo in the current cloud environment");
 		}

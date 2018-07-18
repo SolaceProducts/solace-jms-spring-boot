@@ -114,7 +114,7 @@ public class SolaceJmsAutoCloudConfigurationTest<T> extends SolaceJmsAutoConfigu
 
 		String VCAP_SERVICES = env.getProperty("VCAP_SERVICES");
 		assertNotNull(VCAP_SERVICES);
-		assertFalse(VCAP_SERVICES.contains("solace-messaging"));
+		assertFalse(VCAP_SERVICES.contains("solace-pubsub"));
 
 		try {
 			this.context.getBean(beanClass);
@@ -137,7 +137,7 @@ public class SolaceJmsAutoCloudConfigurationTest<T> extends SolaceJmsAutoConfigu
 		makeCloudEnv();
 
 		String JSONString = addOneSolaceService("VCAP_SERVICES");
-		String CF_VCAP_SERVICES = "VCAP_SERVICES={ \"solace-messaging\": [" + JSONString + "] }";
+		String CF_VCAP_SERVICES = "VCAP_SERVICES={ \"solace-pubsub\": [" + JSONString + "] }";
 
 		load(CF_CLOUD_APP_ENV, CF_VCAP_SERVICES);
 
@@ -149,7 +149,7 @@ public class SolaceJmsAutoCloudConfigurationTest<T> extends SolaceJmsAutoConfigu
 
 		String VCAP_SERVICES = env.getProperty("VCAP_SERVICES");
 		assertNotNull(VCAP_SERVICES);
-		assertTrue(VCAP_SERVICES.contains("solace-messaging"));
+		assertTrue(VCAP_SERVICES.contains("solace-pubsub"));
 
 		validateBackwardsCompatibility();
 
@@ -173,7 +173,7 @@ public class SolaceJmsAutoCloudConfigurationTest<T> extends SolaceJmsAutoConfigu
 		makeCloudEnv();
 
 		String JSONString = addOneSolaceService("VCAP_SERVICES");
-		String CF_VCAP_SERVICES = "VCAP_SERVICES={ \"solace-messaging\": [" + JSONString + "] }";
+		String CF_VCAP_SERVICES = "VCAP_SERVICES={ \"solace-pubsub\": [" + JSONString + "] }";
 
 		load(CF_CLOUD_APP_ENV, CF_VCAP_SERVICES);
 
@@ -200,7 +200,7 @@ public class SolaceJmsAutoCloudConfigurationTest<T> extends SolaceJmsAutoConfigu
 		makeCloudEnv();
 
 		String JSONString = addOneSolaceService("VCAP_SERVICES");
-		String CF_VCAP_SERVICES = "VCAP_SERVICES={ \"solace-messaging\": [" + JSONString + "] }";
+		String CF_VCAP_SERVICES = "VCAP_SERVICES={ \"solace-pubsub\": [" + JSONString + "] }";
 
 		load(CF_CLOUD_APP_ENV, CF_VCAP_SERVICES, "solace.jms.host=192.168.1.80:55500",
 				"solace.jms.clientUsername=bob", "solace.jms.clientPassword=password", "solace.jms.msgVpn=newVpn");
@@ -237,9 +237,9 @@ public class SolaceJmsAutoCloudConfigurationTest<T> extends SolaceJmsAutoConfigu
 
 		JSONObject jsonMapObject = new JSONObject(services);
 		String JSONString = jsonMapObject.toString();
-		environmentVariables.set("VCAP_SERVICES", "{ \"solace-messaging\": [" + JSONString + "] }");
+		environmentVariables.set("VCAP_SERVICES", "{ \"solace-pubsub\": [" + JSONString + "] }");
 
-		String CF_VCAP_SERVICES = "VCAP_SERVICES={ \"solace-messaging\": [" + JSONString + "] }";
+		String CF_VCAP_SERVICES = "VCAP_SERVICES={ \"solace-pubsub\": [" + JSONString + "] }";
 
 		load(CF_CLOUD_APP_ENV, CF_VCAP_SERVICES, "solace.jms.host=192.168.1.80:55500",
 				"solace.jms.clientUsername=bob", "solace.jms.clientPassword=password", "solace.jms.msgVpn=newVpn");
