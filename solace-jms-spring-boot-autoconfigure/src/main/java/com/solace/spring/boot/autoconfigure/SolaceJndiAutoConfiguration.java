@@ -22,8 +22,6 @@ import javax.jms.ConnectionFactory;
 
 import com.solace.services.core.loader.SolaceCredentialsLoader;
 import com.solace.services.core.model.SolaceServiceCredentials;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
@@ -47,7 +45,6 @@ import java.util.List;
 @EnableConfigurationProperties(SolaceJmsProperties.class)
 public class SolaceJndiAutoConfiguration extends SolaceJndiAutoConfigurationBase {
 
-    private static final Logger logger = LoggerFactory.getLogger(SolaceJndiAutoConfiguration.class);
     private SolaceCredentialsLoader solaceServicesInfoLoader = new SolaceCredentialsLoader();
 
     @Autowired

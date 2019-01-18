@@ -21,7 +21,7 @@ For a high level introduction and explanation, you can also refer to the followi
 
 As stated this project provides a Spring Boot Auto-Configuration implementation and a Spring Boot Starter pom for the Solace JMS API. The goal of this project is to make it easier to use Solace JMS within Spring.
 
-The artifacts are published to Maven Central so it should be familiar and intuitive to use this project in your applications. Currently this project is still experimental and as such you may find that many Solace JMS properties are not yet supported. If you find Solace JMS properties that this project does not yet support, simply raise an issue and we'll look into adding this support or submit a pull request with the update.
+The artifacts are published to Maven Central so it should be familiar and intuitive to use this project in your applications. Currently this project is still experimental and as such you may find that many Solace JMS properties are not yet supported.
 
 
 ## Using Auto-Configuration in your App
@@ -47,11 +47,11 @@ See the associated `solace-jms-sample-app-jndi` for an example. To use JNDI with
 
 ### Updating your build
 
-This releases from this project are hosted in [Maven Central](https://mvnrepository.com/artifact/com.solace.spring.boot/solace-jms-spring-boot-starter)
+The releases from this project are hosted in [Maven Central](https://mvnrepository.com/artifact/com.solace.spring.boot/solace-jms-spring-boot-starter )
 
 The easiest way to get started is to include the `solace-jms-spring-boot-starter` in your application. For an examples see the [JMS Sample App](https://github.com/SolaceProducts/solace-jms-spring-boot/tree/master/solace-jms-sample-app) in this project.
 
-Here is how to include the spring boot starter in your project using Gradle and Maven.
+Here is how to include the latest spring boot starter in your project using Gradle and Maven. You can also add a specific version from [Maven Central](https://mvnrepository.com/artifact/com.solace.spring.boot/solace-jms-spring-boot-starter ).
 
 #### Using it with Gradle
 
@@ -65,10 +65,12 @@ compile("com.solace.spring.boot:solace-jms-spring-boot-starter:1.+")
 <dependency>
 	<groupId>com.solace.spring.boot</groupId>
 	<artifactId>solace-jms-spring-boot-starter</artifactId>
-	<version>1.+</version>
+	<version>[1,)</version>
 </dependency>
 ```
+
 ### Configure the Application to use your Solace PubSub+ Service Credentials
+
 #### Deploying your Application to a Cloud Platform
 
 By using [Spring Cloud Connectors](https://cloud.spring.io/spring-cloud-connectors/), this library can automatically configure a `ConnectionFactory` and/or a `JndiTemplate` using the detected Solace PubSub+ services when deployed on a Cloud Platform such as Cloud Foundry.
@@ -97,7 +99,7 @@ For details on valid manifest formats and other ways of exposing Solace service 
 
 #### Updating your Application Properties
 
-Alternatively, configuration of the `JmsTemplate` can also be entirely done through the `application.properties` file. This is where users can control the Solace JMS API properties. Currently this project supports direct configuration of the following properties:
+Alternatively, configuration of the `JmsTemplate` can also be entirely done through the `application.properties` file located in the `src/main/resources` folder. This is where users can control the Solace JMS API properties. Currently this project supports direct configuration of the following properties:
 
 ```
 solace.jms.host
@@ -144,6 +146,19 @@ or
 
 	cd solace-jms-sample-app-jndi
     mvn spring-boot:run
+
+Note: the JMS sample will automatically provision the queue used for testing on the message router. The JNDI sample requires manual configuration of the required settings. Refer to the comments in the `application.properties` file in the `src/main/resources` folder.
+
+### Troubleshooting tips
+
+The sample is logging to the console by default. This can be adjusted in the log4j2.xml log file provided in the `src/main/resources` folder.
+
+Solace API logging can be enabled and configured in the `application.properties` file located in the same folder, by adding:
+
+```
+# Solace logging example:
+logging.level.com.solacesystems=INFO
+```
 
 ## Contributing
 

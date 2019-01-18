@@ -52,7 +52,7 @@ public class JndiDemoApplication {
 
         // Retrieve the name of the queue from the application.properties file
         @JmsListener(destination = "${solace.jms.demoConsumerQueueJndiName}")
-        public void processMsg(Message msg) {
+        public void processMsg(Message<?> msg) {
         	StringBuffer msgAsStr = new StringBuffer("============= Received \nHeaders:");
         	MessageHeaders hdrs = msg.getHeaders();
         	msgAsStr.append("\nUUID: "+hdrs.getId());

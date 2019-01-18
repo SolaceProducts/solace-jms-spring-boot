@@ -26,8 +26,16 @@ public class JndiConsumerConfiguration {
 
     private static final Logger logger = LoggerFactory.getLogger(JndiConsumerConfiguration.class);
 
+    // Use from the jndi connection config
     @Autowired
-    JndiTemplate jndiTemplate;
+    private JndiTemplate jndiTemplate;
+
+    /* Other beans that can be used together to create a customized jndiTemplate in the specific scenario where the app is deployed in Cloud Foundry.
+    @Autowired private SpringSolJmsJndiTemplateCloudFactory springSolJmsJndiTemplateCloudFactory;
+    @Autowired private SolaceServiceCredentials solaceServiceCredentials;
+    Additionally, for backwards compatibility:
+	@Autowired(required=false) private SolaceMessagingInfo solaceMessagingInfo;
+    */
     
     @Bean
     public JndiObjectFactoryBean connectionFactory() {

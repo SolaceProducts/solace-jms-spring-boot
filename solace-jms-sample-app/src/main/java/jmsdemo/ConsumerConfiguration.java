@@ -40,7 +40,6 @@ public class ConsumerConfiguration {
 				String output = os.toString("UTF8");
 	            logger.error("============= Error processing message: " + t.getMessage()+"\n"+output);
 			} catch (UnsupportedEncodingException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
  
