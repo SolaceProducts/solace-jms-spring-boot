@@ -82,8 +82,6 @@ public class SolaceJndiAutoCloudConfiguration extends SolaceJndiAutoConfiguratio
 		List<ServiceInfo> serviceInfos = cloud.getServiceInfos();
 		for (ServiceInfo serviceInfo : serviceInfos) {
 			// Stop when we find the first one...
-			// TODO: Consider annotation driven selection, or sorted plan based
-			// selection
 			if (serviceInfo instanceof SolaceMessagingInfo) {
 				solacemessaging = (SolaceMessagingInfo) serviceInfo;
 				logger.info("Found Cloud Solace PubSub+ Service Instance Id: " + solacemessaging.getId());

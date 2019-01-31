@@ -30,14 +30,6 @@ public class DemoApplication {
         @Autowired
         private JmsTemplate jmsTemplate;
 
-        /* Other beans that can be used together to create a customized JmsTemplate in the specific scenario where the app is deployed in Cloud Foundry.
-        @Autowired private SolConnectionFactory solConnectionFactory;
-        @Autowired private SpringSolJmsConnectionFactoryCloudFactory springSolJmsConnectionFactoryCloudFactory;
-        @Autowired private SolaceServiceCredentials solaceServiceCredentials;
-        Additionally, for backwards compatibility:
-		@Autowired(required=false) private SolaceMessagingInfo solaceMessagingInfo;
-        */
-
         @Value("${solace.jms.demoQueueName}")
         private String queueName;
 

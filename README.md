@@ -32,20 +32,20 @@ Spring Boot Auto-Configuration for the Solace JMS supports both programmatic cre
 
 See the associated `solace-jms-sample-app` for an example of how this is all put together in a simple application. To use Solace JMS you need to do these steps:
 
-1. Update your build.
-2. Autowire the `ConnectionFactory`.
-3. Configure the application to use a Solace PubSub+ service.
+1. [Update your build](#updating-your-build).
+2. [Autowire](##autowiring-connection-objects) the `ConnectionFactory`:
+3. [Configure the application](#configure-the-application-to-use-your-solace-pubsub-service-credentials) to use a Solace PubSub+ service.
 
 #### JNDI lookup of JMS objects
 
 See the associated `solace-jms-sample-app-jndi` for an example. To use JNDI with Solace JMS you need to do these steps:
 
-1. Update your build.
-2. Autowire the `JndiTemplate` for further use e.g.: in a `JndiObjectFactoryBean`.
-3. Configure the application to use a Solace PubSub+ service.
+1. [Update your build](#updating-your-build).
+2. [Autowire](#autowiring-connection-objects) the `JndiTemplate` for further use e.g.: in a `JndiObjectFactoryBean`.
+3. [Configure the application](#configure-the-application-to-use-your-solace-pubsub-service-credentials) to use a Solace PubSub+ service.
 
 
-### Updating your build
+### 1. Updating your build
 
 The releases from this project are hosted in [Maven Central](https://mvnrepository.com/artifact/com.solace.spring.boot/solace-jms-spring-boot-starter )
 
@@ -69,7 +69,22 @@ compile("com.solace.spring.boot:solace-jms-spring-boot-starter:1.+")
 </dependency>
 ```
 
-### Configure the Application to use your Solace PubSub+ Service Credentials
+### 2. Autowiring Connection Objects
+
+To access the Solace message routing service, autowire the following connection objects in your code for JMS or JNDI:
+
+```java
+    @Autowired
+    private ConnectionFactory connectionFactory;    // for JMS
+```
+```java
+    @Autowired
+    private JndiTemplate jndiTemplate;              // for JNDI
+```
+
+Note that if there are multiple services available, e.g. in a cloud deployment or if the application is configured by exposure of a [Solace PubSub+ service manifest](https://github.com/SolaceProducts/solace-java-spring-boot#exposing-a-solace-pubsub-service-manifest-in-the-applications-environment), one of the services will be picked automatically. You can control service selection by autowiring `com.solacesystems.jms.SpringSolJmsConnectionFactoryCloudFactory` or `com.solacesystems.jms.SpringSolJmsJndiTemplateCloudFactory`, which enable getting the list of all services and use the Factory pattern to create a connection object.
+
+### 3. Configure the Application to use your Solace PubSub+ Service Credentials
 
 #### Deploying your Application to a Cloud Platform
 
