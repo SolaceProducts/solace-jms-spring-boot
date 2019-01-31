@@ -47,11 +47,8 @@ public class JndiDemoApplication {
  
         private static final Logger logger = LoggerFactory.getLogger(MessageHandler.class);
 
-        @Autowired
-        JmsTemplate producerJmsTemplate;
-
         // Retrieve the name of the queue from the application.properties file
-        @JmsListener(destination = "${solace.jms.demoConsumerQueueJndiName}")
+        @JmsListener(destination = "${solace.jms.demoConsumerQueueJndiName}", containerFactory = "cFactory")
         public void processMsg(Message<?> msg) {
         	StringBuffer msgAsStr = new StringBuffer("============= Received \nHeaders:");
         	MessageHeaders hdrs = msg.getHeaders();
