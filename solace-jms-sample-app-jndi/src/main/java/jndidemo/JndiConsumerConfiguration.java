@@ -53,7 +53,7 @@ public class JndiConsumerConfiguration {
     
 	// Example configuration of the JmsListenerContainerFactory
     @Bean
-    public DefaultJmsListenerContainerFactory cFactory(DemoErrorHandler errorHandler) {
+    public DefaultJmsListenerContainerFactory listenerContainerFactory(DemoErrorHandler errorHandler) {
         DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
         factory.setConnectionFactory((ConnectionFactory) consumerConnectionFactory().getObject());
         factory.setDestinationResolver(jndiDestinationResolver());

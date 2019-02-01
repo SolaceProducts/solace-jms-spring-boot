@@ -23,7 +23,7 @@ public class ConsumerConfiguration {
 
     // Example configuration of the ConnectionFactory: we instantiate it here ourselves and set an error handler
     @Bean
-    public DefaultJmsListenerContainerFactory cFactory(ConnectionFactory connectionFactory, DemoErrorHandler errorHandler) {
+    public DefaultJmsListenerContainerFactory listenerContainerFactory(ConnectionFactory connectionFactory, DemoErrorHandler errorHandler) {
         DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
         factory.setConnectionFactory(connectionFactory);
         factory.setErrorHandler(errorHandler);
