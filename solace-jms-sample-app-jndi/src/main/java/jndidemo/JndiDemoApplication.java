@@ -51,7 +51,7 @@ public class JndiDemoApplication {
         JmsTemplate producerJmsTemplate;
 
         // Retrieve the name of the queue from the application.properties file
-        @JmsListener(destination = "${solace.jms.demoConsumerQueueJndiName}")
+        @JmsListener(destination = "${solace.jms.demoConsumerQueueJndiName}", containerFactory = "listenerContainerFactory")
         public void processMsg(Message<?> msg) {
         	StringBuffer msgAsStr = new StringBuffer("============= Received \nHeaders:");
         	MessageHeaders hdrs = msg.getHeaders();

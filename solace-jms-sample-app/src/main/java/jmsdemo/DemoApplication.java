@@ -30,15 +30,13 @@ public class DemoApplication {
         @Autowired
         private JmsTemplate jmsTemplate;
 
-//        // Other beans that can be used together to create a customized JmsTemplate
-//        @Autowired private SolConnectionFactory solConnectionFactory;
-//        @Autowired private SpringSolJmsConnectionFactoryCloudFactory springSolJmsConnectionFactoryCloudFactory;
-//        @Autowired private SolaceServiceCredentials solaceServiceCredentials;
-//
-//        /*
-//        For backwards compatibility:
-//        - As before, these exist only in the specific scenario where the app is deployed in Cloud Foundry.*/
-//        @Autowired(required=false) private SolaceMessagingInfo solaceMessagingInfo;
+        // Examples of other options to get JmsTemplate in a cloud environment with possibly multiple providers available:
+        // Use this to access JmsTemplate of the first service found or look up a specific one by
+        // SolaceServiceCredentials
+        // @Autowired private SpringSolJmsConnectionFactoryCloudFactory springSolJmsConnectionFactoryCloudFactory;
+        // @Autowired private SolaceServiceCredentials solaceServiceCredentials;
+        // For backwards compatibility:
+        // @Autowired(required=false) private SolaceMessagingInfo solaceMessagingInfo;
 
         @Value("${solace.jms.demoQueueName}")
         private String queueName;
@@ -57,7 +55,7 @@ public class DemoApplication {
         private static final Logger logger = LoggerFactory.getLogger(MessageHandler.class);
 
         // Retrieve the name of the queue from the application.properties file
-        @JmsListener(destination = "${solace.jms.demoQueueName}")
+        @JmsListener(destination = "${solace.jms.demoQueueName}", containerFactory = "cFactory", concurrency = "2")
         public void processMsg(Message<?> msg) {
         	StringBuffer msgAsStr = new StringBuffer("============= Received \nHeaders:");
         	MessageHeaders hdrs = msg.getHeaders();

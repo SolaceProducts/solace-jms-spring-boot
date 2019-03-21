@@ -12,6 +12,8 @@ import org.springframework.jms.support.destination.JndiDestinationResolver;
 import org.springframework.jndi.JndiObjectFactoryBean;
 import org.springframework.jndi.JndiTemplate;
 
+import com.solacesystems.jms.SpringSolJmsJndiTemplateCloudFactory;
+
 @Configuration
 public class JndiProducerConfiguration {
 
@@ -22,13 +24,14 @@ public class JndiProducerConfiguration {
 
     // Use from the jndi connection config
     @Autowired private JndiTemplate jndiTemplate;
-//    @Autowired private SpringSolJmsJndiTemplateCloudFactory springSolJmsJndiTemplateCloudFactory;
-//    @Autowired private SolaceServiceCredentials solaceServiceCredentials;
-//
-//    /*
-//        For backwards compatibility:
-//        - As before, these exist only in the specific scenario where the app is deployed in Cloud Foundry.*/
-//    @Autowired(required=false) private SolaceMessagingInfo solaceMessagingInfo;
+
+    // Examples of other options to get JndiTemplate in a cloud environment with possibly multiple providers available:
+    // Use this to access JndiTemplate of the first service found or look up a specific one by
+    // SolaceServiceCredentials
+    // @Autowired private SpringSolJmsJndiTemplateCloudFactory springSolJmsJndiTemplateCloudFactory;
+    // @Autowired private SolaceServiceCredentials solaceServiceCredentials;
+    // For backwards compatibility:
+    // @Autowired(required=false) private SolaceMessagingInfo solaceMessagingInfo;
 
     @Bean
     public JndiObjectFactoryBean connectionFactory() {

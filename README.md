@@ -33,7 +33,7 @@ Spring Boot Auto-Configuration for the Solace JMS supports both programmatic cre
 See the associated `solace-jms-sample-app` for an example of how this is all put together in a simple application. To use Solace JMS you need to do these steps:
 
 1. [Update your build](#1-updating-your-build).
-2. [Autowire](##2-autowiring-connection-objects) the `ConnectionFactory`:
+2. [Autowire](#2-autowiring-connection-objects) the `ConnectionFactory`:
 3. [Configure the application](#3-configure-the-application-to-use-your-solace-pubsub-service-credentials) to use a Solace PubSub+ service.
 
 #### JNDI lookup of JMS objects

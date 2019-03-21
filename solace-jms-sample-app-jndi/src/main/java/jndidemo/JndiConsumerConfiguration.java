@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.jms.annotation.EnableJms;
 import org.springframework.jms.config.DefaultJmsListenerContainerFactory;
 import org.springframework.jms.support.destination.JndiDestinationResolver;
@@ -17,6 +18,7 @@ import org.springframework.jndi.JndiTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ErrorHandler;
 
+@Configuration
 @EnableJms
 public class JndiConsumerConfiguration {
 
@@ -30,7 +32,7 @@ public class JndiConsumerConfiguration {
     JndiTemplate jndiTemplate;
     
     @Bean
-    public JndiObjectFactoryBean connectionFactory() {
+    public JndiObjectFactoryBean consumerConnectionFactory() {
         JndiObjectFactoryBean factoryBean = new JndiObjectFactoryBean();
         factoryBean.setJndiTemplate(jndiTemplate);
         factoryBean.setJndiName(connectionFactoryJndiName);
@@ -50,9 +52,9 @@ public class JndiConsumerConfiguration {
     
 	// Example configuration of the JmsListenerContainerFactory
     @Bean
-    public DefaultJmsListenerContainerFactory cFactory(DemoErrorHandler errorHandler) {
+    public DefaultJmsListenerContainerFactory listenerContainerFactory(DemoErrorHandler errorHandler) {
         DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
-        factory.setConnectionFactory((ConnectionFactory) connectionFactory().getObject());
+        factory.setConnectionFactory((ConnectionFactory) consumerConnectionFactory().getObject());
         factory.setDestinationResolver(jndiDestinationResolver());
         factory.setErrorHandler(errorHandler);
         factory.setConcurrency("3-10");
