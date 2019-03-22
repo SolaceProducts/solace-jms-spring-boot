@@ -26,8 +26,7 @@ public class JndiProducerConfiguration {
     @Autowired private JndiTemplate jndiTemplate;
 
     // Examples of other options to get JndiTemplate in a cloud environment with possibly multiple providers available:
-    // Use this to access JndiTemplate of the first service found or look up a specific one by
-    // SolaceServiceCredentials
+    // Use this to access JndiTemplate of the first service found or look up a specific one by SolaceServiceCredentials
     // @Autowired private SpringSolJmsJndiTemplateCloudFactory springSolJmsJndiTemplateCloudFactory;
     // @Autowired private SolaceServiceCredentials solaceServiceCredentials;
     // For backwards compatibility:
@@ -52,7 +51,7 @@ public class JndiProducerConfiguration {
     // Here we are using JndiDestinationResolver for JNDI destinations
     // Other options include using DynamicDestinationResolver for non-JNDI destinations
     @Bean
-    public JndiDestinationResolver jndiDestinationResolver() {
+    public JndiDestinationResolver producerJndiDestinationResolver() {
     	JndiDestinationResolver jdr = new JndiDestinationResolver();
         jdr.setCache(true);
         jdr.setJndiTemplate(jndiTemplate);
@@ -63,7 +62,7 @@ public class JndiProducerConfiguration {
 	public JmsTemplate producerJmsTemplate() {
 		JmsTemplate jt = new JmsTemplate(cachingConnectionFactory());
 		jt.setDeliveryPersistent(true);
-		jt.setDestinationResolver(jndiDestinationResolver());
+		jt.setDestinationResolver(producerJndiDestinationResolver());
 		return jt;
 	}
 }

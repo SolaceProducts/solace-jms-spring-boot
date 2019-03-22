@@ -43,7 +43,7 @@ public class JndiConsumerConfiguration {
     // Here we are using JndiDestinationResolver for JNDI destinations
     // Other options include using DynamicDestinationResolver for non-JNDI destinations
     @Bean
-    public JndiDestinationResolver jndiDestinationResolver() {
+    public JndiDestinationResolver consumerJndiDestinationResolver() {
     	JndiDestinationResolver jdr = new JndiDestinationResolver();
         jdr.setCache(true);
         jdr.setJndiTemplate(jndiTemplate);
@@ -55,7 +55,7 @@ public class JndiConsumerConfiguration {
     public DefaultJmsListenerContainerFactory listenerContainerFactory(DemoErrorHandler errorHandler) {
         DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
         factory.setConnectionFactory((ConnectionFactory) consumerConnectionFactory().getObject());
-        factory.setDestinationResolver(jndiDestinationResolver());
+        factory.setDestinationResolver(consumerJndiDestinationResolver());
         factory.setErrorHandler(errorHandler);
         factory.setConcurrency("3-10");
        return factory;
