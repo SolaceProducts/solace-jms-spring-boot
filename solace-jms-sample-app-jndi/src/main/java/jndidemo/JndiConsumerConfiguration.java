@@ -3,7 +3,10 @@ package jndidemo;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
+
 import javax.jms.ConnectionFactory;
+import javax.naming.NamingException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,32 +21,37 @@ import org.springframework.jndi.JndiTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ErrorHandler;
 
-@Configuration
 @EnableJms
+@Configuration
 public class JndiConsumerConfiguration {
 
-	// Resource definitions: connection factory and queue destination
     @Value("${solace.jms.demoConnectionFactoryJndiName}")
     private String connectionFactoryJndiName;
 
+    @Autowired
+    private JndiTemplate jndiTemplate;
+
     private static final Logger logger = LoggerFactory.getLogger(JndiConsumerConfiguration.class);
 
-    @Autowired
-    JndiTemplate jndiTemplate;
-    
-    @Bean
-    public JndiObjectFactoryBean consumerConnectionFactory() {
+    private JndiObjectFactoryBean consumerConnectionFactory() {
         JndiObjectFactoryBean factoryBean = new JndiObjectFactoryBean();
         factoryBean.setJndiTemplate(jndiTemplate);
         factoryBean.setJndiName(connectionFactoryJndiName);
+        // following ensures all the properties are injected before returning
+        try {
+			factoryBean.afterPropertiesSet();
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (NamingException e) {
+			e.printStackTrace();
+		}
         return factoryBean;
     }
     
     // Configure the destination resolver for the consumer:
     // Here we are using JndiDestinationResolver for JNDI destinations
     // Other options include using DynamicDestinationResolver for non-JNDI destinations
-    @Bean
-    public JndiDestinationResolver consumerJndiDestinationResolver() {
+    private JndiDestinationResolver consumerJndiDestinationResolver() {
     	JndiDestinationResolver jdr = new JndiDestinationResolver();
         jdr.setCache(true);
         jdr.setJndiTemplate(jndiTemplate);
@@ -52,7 +60,7 @@ public class JndiConsumerConfiguration {
     
 	// Example configuration of the JmsListenerContainerFactory
     @Bean
-    public DefaultJmsListenerContainerFactory listenerContainerFactory(DemoErrorHandler errorHandler) {
+    public DefaultJmsListenerContainerFactory cFactory(DemoErrorHandler errorHandler) {
         DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
         factory.setConnectionFactory((ConnectionFactory) consumerConnectionFactory().getObject());
         factory.setDestinationResolver(consumerJndiDestinationResolver());

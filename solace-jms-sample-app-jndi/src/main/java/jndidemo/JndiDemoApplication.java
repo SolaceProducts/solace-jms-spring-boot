@@ -1,7 +1,6 @@
 package jndidemo;
 
 import java.util.Iterator;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,52 +17,57 @@ import org.springframework.stereotype.Service;
 
 @SpringBootApplication
 public class JndiDemoApplication {
-    
-    public static void main(String[] args) {
-        SpringApplication.run(JndiDemoApplication.class, args);
-    }
 
-    @Service
-    static class MessageProducer implements CommandLineRunner {
+	public static void main(String[] args) {
+		SpringApplication.run(JndiDemoApplication.class, args);
+	}
 
-        private static final Logger logger = LoggerFactory.getLogger(MessageProducer.class);
+	@Service
+	static class MessageProducer implements CommandLineRunner {
 
-        @Autowired
-        JmsTemplate producerJmsTemplate;
+		private static final Logger logger = LoggerFactory.getLogger(MessageProducer.class);
 
-        @Value("${solace.jms.demoProducerQueueJndiName}")
-        private String queueJndiName;
-        
-        @Override
-        public void run(String... strings) throws Exception {
-            String msg = "Hello World";
-            logger.info("============= Sending " + msg);
-            this.producerJmsTemplate.convertAndSend(queueJndiName, msg);
-        }
-    }
+		@Autowired
+		private JmsTemplate producerJmsTemplate;
 
-    @Component
-    static class MessageHandler {
- 
-        private static final Logger logger = LoggerFactory.getLogger(MessageHandler.class);
+		// Examples of other options to get JmsTemplate in a cloud environment with possibly multiple providers available:
+		// Use this to access JmsTemplate of the first service found or look up a specific one by SolaceServiceCredentials
+		// @Autowired private SpringSolJmsConnectionFactoryCloudFactory springSolJmsConnectionFactoryCloudFactory;
+		// @Autowired private SolaceServiceCredentials solaceServiceCredentials;
+		// For backwards compatibility:
+		// @Autowired(required=false) private SolaceMessagingInfo solaceMessagingInfo;
 
-        @Autowired
-        JmsTemplate producerJmsTemplate;
+		@Value("${solace.jms.demoProducerQueueJndiName}")
+		private String queueJndiName;
 
-        // Retrieve the name of the queue from the application.properties file
-        @JmsListener(destination = "${solace.jms.demoConsumerQueueJndiName}", containerFactory = "listenerContainerFactory")
-        public void processMsg(Message<?> msg) {
-        	StringBuffer msgAsStr = new StringBuffer("============= Received \nHeaders:");
-        	MessageHeaders hdrs = msg.getHeaders();
-        	msgAsStr.append("\nUUID: "+hdrs.getId());
-        	msgAsStr.append("\nTimestamp: "+hdrs.getTimestamp());
-        	Iterator<String> keyIter = hdrs.keySet().iterator();
-        	while (keyIter.hasNext()) {
-        		String key = keyIter.next();
-            	msgAsStr.append("\n"+key+": "+hdrs.get(key));        		
-        	}
-        	msgAsStr.append("\nPayload: "+msg.getPayload());
-            logger.info(msgAsStr.toString());
-        }
-    }
+		@Override
+		public void run(String... strings) throws Exception {
+			String msg = "Hello World";
+			logger.info("============= Sending " + msg);
+			this.producerJmsTemplate.convertAndSend(queueJndiName, msg);
+		}
+	}
+
+	@Component
+	static class MessageHandler {
+
+		private static final Logger logger = LoggerFactory.getLogger(MessageHandler.class);
+
+		// Retrieve the name of the queue from the application.properties file
+		@JmsListener(destination = "${solace.jms.demoConsumerQueueJndiName}", containerFactory = "cFactory")
+		public void processMsg(Message<?> msg) {
+			StringBuffer msgAsStr = new StringBuffer("============= Received \nHeaders:");
+			MessageHeaders hdrs = msg.getHeaders();
+			msgAsStr.append("\nUUID: " + hdrs.getId());
+			msgAsStr.append("\nTimestamp: " + hdrs.getTimestamp());
+			Iterator<String> keyIter = hdrs.keySet().iterator();
+			while (keyIter.hasNext()) {
+				String key = keyIter.next();
+				msgAsStr.append("\n" + key + ": " + hdrs.get(key));
+			}
+			msgAsStr.append("\nPayload: " + msg.getPayload());
+			logger.info(msgAsStr.toString());
+		}
+	}
+
 }

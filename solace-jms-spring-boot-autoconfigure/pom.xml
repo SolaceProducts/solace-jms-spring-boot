@@ -42,7 +42,7 @@
 		<dependency>
 			<groupId>com.solacesystems</groupId>
 			<artifactId>sol-jms</artifactId>
-			<version>[10,)</version>
+			<version>[10.5,)</version>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
