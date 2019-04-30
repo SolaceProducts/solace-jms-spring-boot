@@ -21,7 +21,7 @@ For a high level introduction and explanation, you can also refer to the followi
 
 As stated this project provides a Spring Boot Auto-Configuration implementation and a Spring Boot Starter pom for the Solace JMS API. The goal of this project is to make it easier to use Solace JMS within Spring.
 
-The artifacts are published to Maven Central so it should be familiar and intuitive to use this project in your applications. Currently this project is still experimental and as such you may find that many Solace JMS properties are not yet supported. If you find Solace JMS properties that this project does not yet support, simply raise an issue and we'll look into adding this support or submit a pull request with the update.
+The artifacts are published to Maven Central so it should be familiar and intuitive to use this project in your applications. Currently this project is still experimental and as such you may find that many Solace JMS properties are not yet supported.
 
 
 ## Using Auto-Configuration in your App
@@ -32,26 +32,26 @@ Spring Boot Auto-Configuration for the Solace JMS supports both programmatic cre
 
 See the associated `solace-jms-sample-app` for an example of how this is all put together in a simple application. To use Solace JMS you need to do these steps:
 
-1. Update your build.
-2. Autowire the `ConnectionFactory`.
-3. Configure the application to use a Solace PubSub+ service.
+1. [Update your build](#1-updating-your-build).
+2. [Autowire](#2-autowiring-connection-objects) the `ConnectionFactory`:
+3. [Configure the application](#3-configure-the-application-to-use-your-solace-pubsub-service-credentials) to use a Solace PubSub+ service.
 
 #### JNDI lookup of JMS objects
 
 See the associated `solace-jms-sample-app-jndi` for an example. To use JNDI with Solace JMS you need to do these steps:
 
-1. Update your build.
-2. Autowire the `JndiTemplate` for further use e.g.: in a `JndiObjectFactoryBean`.
-3. Configure the application to use a Solace PubSub+ service.
+1. [Update your build](#1-updating-your-build).
+2. [Autowire](#2-autowiring-connection-objects) the `JndiTemplate` for further use e.g.: in a `JndiObjectFactoryBean`.
+3. [Configure the application](#3-configure-the-application-to-use-your-solace-pubsub-service-credentials) to use a Solace PubSub+ service.
 
 
-### Updating your build
+### 1. Updating your build
 
-This releases from this project are hosted in [Maven Central](https://mvnrepository.com/artifact/com.solace.spring.boot/solace-jms-spring-boot-starter)
+The releases from this project are hosted in [Maven Central](https://mvnrepository.com/artifact/com.solace.spring.boot/solace-jms-spring-boot-starter )
 
 The easiest way to get started is to include the `solace-jms-spring-boot-starter` in your application. For an examples see the [JMS Sample App](https://github.com/SolaceProducts/solace-jms-spring-boot/tree/master/solace-jms-sample-app) in this project.
 
-Here is how to include the spring boot starter in your project using Gradle and Maven.
+Here is how to include the latest spring boot starter in your project using Gradle and Maven. You can also add a specific version from [Maven Central](https://mvnrepository.com/artifact/com.solace.spring.boot/solace-jms-spring-boot-starter ).
 
 #### Using it with Gradle
 
@@ -65,10 +65,27 @@ compile("com.solace.spring.boot:solace-jms-spring-boot-starter:1.+")
 <dependency>
 	<groupId>com.solace.spring.boot</groupId>
 	<artifactId>solace-jms-spring-boot-starter</artifactId>
-	<version>1.+</version>
+	<version>[1,)</version>
 </dependency>
 ```
-### Configure the Application to use your Solace PubSub+ Service Credentials
+
+### 2. Autowiring Connection Objects
+
+To access the Solace message routing service, autowire the following connection objects in your code for JMS or JNDI:
+
+```java
+    @Autowired
+    private ConnectionFactory connectionFactory;    // for JMS
+```
+```java
+    @Autowired
+    private JndiTemplate jndiTemplate;              // for JNDI
+```
+
+Note that if there are multiple services available, e.g. in a cloud deployment or if the application is configured by exposure of a [Solace PubSub+ service manifest](https://github.com/SolaceProducts/solace-java-spring-boot#exposing-a-solace-pubsub-service-manifest-in-the-applications-environment), one of the services will be picked automatically. You can control service selection by autowiring `com.solacesystems.jms.SpringSolJmsConnectionFactoryCloudFactory` or `com.solacesystems.jms.SpringSolJmsJndiTemplateCloudFactory`, which enable getting the list of all services and use the Factory pattern to create a connection object.
+
+### 3. Configure the Application to use your Solace PubSub+ Service Credentials
+
 #### Deploying your Application to a Cloud Platform
 
 By using [Spring Cloud Connectors](https://cloud.spring.io/spring-cloud-connectors/), this library can automatically configure a `ConnectionFactory` and/or a `JndiTemplate` using the detected Solace PubSub+ services when deployed on a Cloud Platform such as Cloud Foundry.
@@ -97,7 +114,7 @@ For details on valid manifest formats and other ways of exposing Solace service 
 
 #### Updating your Application Properties
 
-Alternatively, configuration of the `JmsTemplate` can also be entirely done through the `application.properties` file. This is where users can control the Solace JMS API properties. Currently this project supports direct configuration of the following properties:
+Alternatively, configuration of the `JmsTemplate` can also be entirely done through the `application.properties` file located in the `src/main/resources` folder. This is where users can control the Solace JMS API properties. Currently this project supports direct configuration of the following properties:
 
 ```
 solace.jms.host
@@ -144,6 +161,19 @@ or
 
 	cd solace-jms-sample-app-jndi
     mvn spring-boot:run
+
+Note: the JMS sample will automatically provision the queue used for testing on the message router. The JNDI sample requires manual configuration of the required settings. Refer to the comments in the `application.properties` file in the `src/main/resources` folder.
+
+### Troubleshooting tips
+
+The sample is logging to the console by default. This can be adjusted in the log4j2.xml log file provided in the `src/main/resources` folder.
+
+Solace API logging can be enabled and configured in the `application.properties` file located in the same folder, by adding:
+
+```
+# Solace logging example:
+logging.level.com.solacesystems=INFO
+```
 
 ## Contributing
 

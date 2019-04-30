@@ -1,5 +1,3 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.solace.spring.boot.autoconfigure.SolaceJndiAutoCloudConfiguration,\
-com.solace.spring.boot.autoconfigure.SolaceJndiAutoConfiguration,\
 com.solace.spring.boot.autoconfigure.SolaceJmsAutoCloudConfiguration,\
 com.solace.spring.boot.autoconfigure.SolaceJmsAutoConfiguration

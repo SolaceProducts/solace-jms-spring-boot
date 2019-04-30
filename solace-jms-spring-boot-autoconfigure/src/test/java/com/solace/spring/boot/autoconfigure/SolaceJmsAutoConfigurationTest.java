@@ -23,6 +23,7 @@ import com.solacesystems.jms.SolConnectionFactory;
 import com.solacesystems.jms.SolConnectionFactoryImpl;
 import com.solacesystems.jms.SpringSolJmsConnectionFactoryCloudFactory;
 import org.junit.Test;
+import org.springframework.beans.factory.BeanNotOfRequiredTypeException;
 import org.springframework.jms.core.JmsTemplate;
 
 import static org.junit.Assert.assertEquals;
@@ -96,6 +97,10 @@ public class SolaceJmsAutoConfigurationTest extends SolaceJmsAutoConfigurationTe
 
 		assertNotNull(this.context.getBean(SolConnectionFactory.class));
 		assertNotNull(this.context.getBean(SpringSolJmsConnectionFactoryCloudFactory.class));
-		assertNull(this.context.getBean(SolaceServiceCredentials.class));
+		try {
+			assertNull(this.context.getBean(SolaceServiceCredentials.class));
+		} catch (BeanNotOfRequiredTypeException e) {
+			assert(e.getMessage().contains("was actually of type 'org.springframework.beans.factory.support.NullBean'"));
+		}
 	}
 }

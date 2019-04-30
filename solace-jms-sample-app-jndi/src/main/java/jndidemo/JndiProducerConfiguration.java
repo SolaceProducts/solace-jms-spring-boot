@@ -1,10 +1,8 @@
 package jndidemo;
 
 import javax.jms.ConnectionFactory;
+import javax.naming.NamingException;
 
-import com.solace.services.core.model.SolaceServiceCredentials;
-import com.solace.spring.cloud.core.SolaceMessagingInfo;
-import com.solacesystems.jms.SpringSolJmsJndiTemplateCloudFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -18,32 +16,29 @@ import org.springframework.jndi.JndiTemplate;
 @Configuration
 public class JndiProducerConfiguration {
 
-    // Resource definitions: connection factory and queue destination
     @Value("${solace.jms.demoConnectionFactoryJndiName}")
     private String connectionFactoryJndiName;
 
+    @Autowired
+    private JndiTemplate jndiTemplate;
 
-    // Use from the jndi connection config
-    @Autowired private JndiTemplate jndiTemplate;
-    @Autowired private SpringSolJmsJndiTemplateCloudFactory springSolJmsJndiTemplateCloudFactory;
-    @Autowired private SolaceServiceCredentials solaceServiceCredentials;
-
-    /*
-        For backwards compatibility:
-        - As before, these exist only in the specific scenario where the app is deployed in Cloud Foundry.*/
-    @Autowired(required=false) private SolaceMessagingInfo solaceMessagingInfo;
-
-    @Bean
-    public JndiObjectFactoryBean connectionFactory() {
+    private JndiObjectFactoryBean producerConnectionFactory() {
         JndiObjectFactoryBean factoryBean = new JndiObjectFactoryBean();
         factoryBean.setJndiTemplate(jndiTemplate);
         factoryBean.setJndiName(connectionFactoryJndiName);
+        // following ensures all the properties are injected before returning
+        try {
+			factoryBean.afterPropertiesSet();
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (NamingException e) {
+			e.printStackTrace();
+		}
         return factoryBean;
     }
 
-    @Bean
-	public CachingConnectionFactory cachingConnectionFactory() {
-		CachingConnectionFactory ccf = new CachingConnectionFactory((ConnectionFactory) connectionFactory().getObject());
+	private CachingConnectionFactory producerCachingConnectionFactory() {
+		CachingConnectionFactory ccf = new CachingConnectionFactory((ConnectionFactory) producerConnectionFactory().getObject());
 		ccf.setSessionCacheSize(10);
 		return ccf;
 	}
@@ -51,8 +46,7 @@ public class JndiProducerConfiguration {
     // Configure the destination resolver for the producer:
     // Here we are using JndiDestinationResolver for JNDI destinations
     // Other options include using DynamicDestinationResolver for non-JNDI destinations
-    @Bean
-    public JndiDestinationResolver jndiDestinationResolver() {
+    private JndiDestinationResolver producerJndiDestinationResolver() {
     	JndiDestinationResolver jdr = new JndiDestinationResolver();
         jdr.setCache(true);
         jdr.setJndiTemplate(jndiTemplate);
@@ -61,9 +55,10 @@ public class JndiProducerConfiguration {
 
 	@Bean
 	public JmsTemplate producerJmsTemplate() {
-		JmsTemplate jt = new JmsTemplate(cachingConnectionFactory());
+		JmsTemplate jt = new JmsTemplate(producerCachingConnectionFactory());
 		jt.setDeliveryPersistent(true);
-		jt.setDestinationResolver(jndiDestinationResolver());
+		jt.setDestinationResolver(producerJndiDestinationResolver());
 		return jt;
 	}
+
 }

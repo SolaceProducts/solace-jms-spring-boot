@@ -9,12 +9,14 @@ import javax.jms.ConnectionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.jms.annotation.EnableJms;
 import org.springframework.jms.config.DefaultJmsListenerContainerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ErrorHandler;
 
 @EnableJms
+@Configuration
 public class ConsumerConfiguration {
 
     private static final Logger logger = LoggerFactory.getLogger(ConsumerConfiguration.class);
