@@ -21,7 +21,7 @@ For a high level introduction and explanation, you can also refer to the followi
 
 As stated this project provides a Spring Boot Auto-Configuration implementation and a Spring Boot Starter pom for the Solace JMS API. The goal of this project is to make it easier to use Solace JMS within Spring.
 
-The artifacts are published to Maven Central so it should be familiar and intuitive to use this project in your applications. Currently this project is still experimental and as such you may find that many Solace JMS properties are not yet supported.
+The artifacts are published to Maven Central so it should be familiar and intuitive to use this project in your applications.
 
 
 ## Using Auto-Configuration in your App
@@ -99,7 +99,7 @@ For example:
 <dependency>
 	<groupId>com.solace.cloud.cloudfoundry</groupId>
 	<artifactId>solace-spring-cloud-connector</artifactId>
-	<version>2.1.0</version>
+	<version>[3,)</version>
 </dependency>
 ```
 
@@ -127,7 +127,7 @@ solace.jms.clientName
 solace.jms.directTransport
 ```
 
-Where reasonable, sensible defaults are always chosen. So a developer using a Solace PubSub+ message broker and wishing to use the default message-vpn must only set the `solace.jms.host`. When using JNDI, the configured connection factory properties on the Solace message router are taken as a starting point, including the `clientName` and `directTransport` configurations.
+Where reasonable, sensible defaults are always chosen. So a developer using a Solace PubSub+ message broker and wishing to use the default message-vpn must only set the `solace.jms.host`. When using JNDI, the configured connection factory properties on the Solace message broker are taken as a starting point, including the `clientName` and `directTransport` configurations.
 
 See [`SolaceJmsProperties`](https://github.com/SolaceProducts/solace-jms-spring-boot/blob/master/solace-jms-spring-boot-autoconfigure/src/main/java/com/solace/spring/boot/autoconfigure/SolaceJmsProperties.java) for the most up to date list of directly configurable properties.
 
@@ -163,7 +163,7 @@ or
 	cd solace-jms-sample-app-jndi
     mvn spring-boot:run
 
-Note: the JMS sample will automatically provision the queue used for testing on the message router. The JNDI sample requires manual configuration of the required settings. Refer to the comments in the `application.properties` file in the `src/main/resources` folder.
+Note: the JMS sample will automatically provision the queue used for testing on the message broker. The JNDI sample requires manual configuration of the required settings. Refer to the comments in the `application.properties` file in the `src/main/resources` folder.
 
 ### Troubleshooting tips
 
