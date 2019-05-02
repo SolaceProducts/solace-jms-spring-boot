@@ -49,14 +49,15 @@ See the associated `solace-jms-sample-app-jndi` for an example. To use JNDI with
 
 The releases from this project are hosted in [Maven Central](https://mvnrepository.com/artifact/com.solace.spring.boot/solace-jms-spring-boot-starter )
 
-The easiest way to get started is to include the `solace-jms-spring-boot-starter` in your application. For an examples see the [JMS Sample App](https://github.com/SolaceProducts/solace-jms-spring-boot/tree/master/solace-jms-sample-app) in this project.
+The easiest way to get started is to include the `solace-jms-spring-boot-starter` in your application. For an example see the [JMS Sample App](https://github.com/SolaceProducts/solace-jms-spring-boot/tree/master/solace-jms-sample-app) in this project.
 
 Here is how to include the latest spring boot starter in your project using Gradle and Maven. You can also add a specific version from [Maven Central](https://mvnrepository.com/artifact/com.solace.spring.boot/solace-jms-spring-boot-starter ).
+Note that you'll neeed to include version 3 or later to use Spring Boot release 2.x.
 
 #### Using it with Gradle
 
 ```groovy
-compile("com.solace.spring.boot:solace-jms-spring-boot-starter:1.+")
+compile("com.solace.spring.boot:solace-jms-spring-boot-starter:3.+")
 ```
 
 #### Using it with Maven
@@ -65,7 +66,7 @@ compile("com.solace.spring.boot:solace-jms-spring-boot-starter:1.+")
 <dependency>
 	<groupId>com.solace.spring.boot</groupId>
 	<artifactId>solace-jms-spring-boot-starter</artifactId>
-	<version>[1,)</version>
+	<version>[3,)</version>
 </dependency>
 ```
 
