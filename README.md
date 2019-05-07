@@ -99,7 +99,7 @@ For example:
 <dependency>
 	<groupId>com.solace.cloud.cloudfoundry</groupId>
 	<artifactId>solace-spring-cloud-connector</artifactId>
-	<version>[3,)</version>
+	<version>[4,)</version>
 </dependency>
 ```
 
@@ -127,7 +127,7 @@ solace.jms.clientName
 solace.jms.directTransport
 ```
 
-Where reasonable, sensible defaults are always chosen. So a developer using a Solace PubSub+ message broker and wishing to use the default message-vpn must only set the `solace.jms.host`. When using JNDI, the configured connection factory properties on the Solace message broker are taken as a starting point, including the `clientName` and `directTransport` configurations.
+Where reasonable, sensible defaults are always chosen. So a developer using a Solace PubSub+ message broker and wishing to use the default message-vpn may only set the `solace.jms.host`. When using JNDI, the configured connection factory properties on the Solace message broker are taken as a starting point, including the `clientName` and `directTransport` configurations.
 
 See [`SolaceJmsProperties`](https://github.com/SolaceProducts/solace-jms-spring-boot/blob/master/solace-jms-spring-boot-autoconfigure/src/main/java/com/solace/spring/boot/autoconfigure/SolaceJmsProperties.java) for the most up to date list of directly configurable properties.
 
