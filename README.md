@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/SolaceProducts/solace-jms-spring-boot.svg?branch=master)](https://travis-ci.org/SolaceProducts/solace-jms-spring-boot)
+
 # Spring Boot Auto-Configuration for the Solace JMS
 
 This project provides Spring Boot Auto-Configuration and an associated Spring Boot Started for the Solace JMS API. The goal of this project is to make it easy to use Solace JMS within a Spring application so you can take advantage of all the benefits of Spring Boot auto-configuration.
@@ -148,8 +150,6 @@ or
 ## Contributing
 
 Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on the process for submitting pull requests to us.
-[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v1.4%20adopted-ff69b4.svg)](code-of-conduct.md)
-Please note that this project is released with a Contributor Code of Conduct. By participating in this project you agree to abide by its terms.
 
 ## Authors
 
