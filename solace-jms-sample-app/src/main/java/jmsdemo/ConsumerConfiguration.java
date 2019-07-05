@@ -33,6 +33,7 @@ public class ConsumerConfiguration {
     @Service
     public class DemoErrorHandler implements ErrorHandler{   
 
+        @Override
         public void handleError(Throwable t) {
         	ByteArrayOutputStream os = new ByteArrayOutputStream();
         	PrintStream ps = new PrintStream(os);

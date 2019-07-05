@@ -41,6 +41,7 @@ public class DemoApplication {
         @Value("${solace.jms.demoQueueName}")
         private String queueName;
 
+        @Override
         public void run(String... strings) throws Exception {
             String msg = "Hello World";
             logger.info("============= Sending " + msg);

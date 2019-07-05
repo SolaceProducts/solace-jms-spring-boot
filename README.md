@@ -1,3 +1,5 @@
+[![Build Status](//travis-ci.org/SolaceProducts/solace-jms-spring-boot.svg?branch=master)](//travis-ci.org/SolaceProducts/solace-jms-spring-boot)
+
 # Spring Boot Auto-Configuration for the Solace JMS
 
 This project provides Spring Boot Auto-Configuration and an associated Spring Boot Started for the Solace JMS API. The goal of this project is to make it easy to use Solace JMS within a Spring application so you can take advantage of all the benefits of Spring Boot auto-configuration.
@@ -26,7 +28,7 @@ The artifacts are published to Maven Central so it should be familiar and intuit
 
 ## Using Auto-Configuration in your App
 
-Spring Boot Auto-Configuration for the Solace JMS supports both programmatic creation or JNDI lookup of JMS objects. To learn more about JNDI refer to the [Obtaining JMS objects using JNDI tutorial](https://solacesamples.github.io/solace-samples-jms/using-jndi/).
+Spring Boot Auto-Configuration for the Solace JMS supports both programmatic creation or JNDI lookup of JMS objects. To learn more about JNDI refer to the [Obtaining JMS objects using JNDI tutorial](//solace.com/samples/solace-samples-jms/using-jndi/).
 
 #### Programmatic creation of JMS objects
 
@@ -47,11 +49,11 @@ See the associated `solace-jms-sample-app-jndi` for an example. To use JNDI with
 
 ### 1. Updating your build
 
-The releases from this project are hosted in [Maven Central](https://mvnrepository.com/artifact/com.solace.spring.boot/solace-jms-spring-boot-starter )
+The releases from this project are hosted in [Maven Central](//mvnrepository.com/artifact/com.solace.spring.boot/solace-jms-spring-boot-starter )
 
-The easiest way to get started is to include the `solace-jms-spring-boot-starter` in your application. For an example see the [JMS Sample App](https://github.com/SolaceProducts/solace-jms-spring-boot/tree/master/solace-jms-sample-app) in this project.
+The easiest way to get started is to include the `solace-jms-spring-boot-starter` in your application. For an example see the [JMS Sample App](//github.com/SolaceProducts/solace-jms-spring-boot/tree/master/solace-jms-sample-app) in this project.
 
-Here is how to include the latest spring boot starter in your project using Gradle and Maven. You can also add a specific version from [Maven Central](https://mvnrepository.com/artifact/com.solace.spring.boot/solace-jms-spring-boot-starter ).
+Here is how to include the latest spring boot starter in your project using Gradle and Maven. You can also add a specific version from [Maven Central](//mvnrepository.com/artifact/com.solace.spring.boot/solace-jms-spring-boot-starter ).
 Note that you'll neeed to include version 3 or later to use Spring Boot release 2.x.
 
 #### Using it with Gradle
@@ -83,15 +85,15 @@ To access the Solace message routing service, autowire the following connection 
     private JndiTemplate jndiTemplate;              // for JNDI
 ```
 
-Note that if there are multiple services available, e.g. in a cloud deployment or if the application is configured by exposure of a [Solace PubSub+ service manifest](https://github.com/SolaceProducts/solace-java-spring-boot#exposing-a-solace-pubsub-service-manifest-in-the-applications-environment), one of the services will be picked automatically. You can control service selection by autowiring `com.solacesystems.jms.SpringSolJmsConnectionFactoryCloudFactory` or `com.solacesystems.jms.SpringSolJmsJndiTemplateCloudFactory`, which enable getting the list of all services and use the Factory pattern to create a connection object.
+Note that if there are multiple services available, e.g. in a cloud deployment or if the application is configured by exposure of a [Solace PubSub+ service manifest](//github.com/SolaceProducts/solace-java-spring-boot#exposing-a-solace-pubsub-service-manifest-in-the-applications-environment), one of the services will be picked automatically. You can control service selection by autowiring `com.solacesystems.jms.SpringSolJmsConnectionFactoryCloudFactory` or `com.solacesystems.jms.SpringSolJmsJndiTemplateCloudFactory`, which enable getting the list of all services and use the Factory pattern to create a connection object.
 
 ### 3. Configure the Application to use your Solace PubSub+ Service Credentials
 
 #### Deploying your Application to a Cloud Platform
 
-By using [Spring Cloud Connectors](https://cloud.spring.io/spring-cloud-connectors/), this library can automatically configure a `ConnectionFactory` and/or a `JndiTemplate` using the detected Solace PubSub+ services when deployed on a Cloud Platform such as Cloud Foundry.
+By using [Spring Cloud Connectors](//cloud.spring.io/spring-cloud-connectors/), this library can automatically configure a `ConnectionFactory` and/or a `JndiTemplate` using the detected Solace PubSub+ services when deployed on a Cloud Platform such as Cloud Foundry.
 
-Currently, the [Solace Cloud Foundry Cloud Connector](https://github.com/SolaceProducts/sl-spring-cloud-connectors) is the only connector that is supported by default in this library, but could easily be augmented by adding your own Solace Spring Cloud Connectors as dependencies to the [auto-configuration's POM](solace-jms-spring-boot-autoconfigure/pom.xml).
+Currently, the [Solace Cloud Foundry Cloud Connector](//github.com/SolaceProducts/sl-spring-cloud-connectors) is the only connector that is supported by default in this library, but could easily be augmented by adding your own Solace Spring Cloud Connectors as dependencies to the [auto-configuration's POM](solace-jms-spring-boot-autoconfigure/pom.xml).
 
 For example:
 
@@ -111,7 +113,7 @@ For example, you can set a `SOLCAP_SERVICES` variable in either your JVM propert
 
 The properties provided by this externally-provided manifest can also be augmented using the values from the [application's properties file](#updating-your-application-properties).
 
-For details on valid manifest formats and other ways of exposing Solace service manifests to your application, see the [Manifest Load Order and Expected Formats](https://github.com/SolaceProducts/solace-services-info#manifest-load-order-and-expected-formats) section in the [Solace Services Info](https://github.com/SolaceProducts/solace-services-info) project.
+For details on valid manifest formats and other ways of exposing Solace service manifests to your application, see the [Manifest Load Order and Expected Formats](//github.com/SolaceProducts/solace-services-info#manifest-load-order-and-expected-formats) section in the [Solace Services Info](//github.com/SolaceProducts/solace-services-info) project.
 
 #### Updating your Application Properties
 
@@ -129,12 +131,12 @@ solace.jms.directTransport
 
 Where reasonable, sensible defaults are always chosen. So a developer using a Solace PubSub+ message broker and wishing to use the default message-vpn may only set the `solace.jms.host`. When using JNDI, the configured connection factory properties on the Solace message broker are taken as a starting point, including the `clientName` and `directTransport` configurations.
 
-See [`SolaceJmsProperties`](https://github.com/SolaceProducts/solace-jms-spring-boot/blob/master/solace-jms-spring-boot-autoconfigure/src/main/java/com/solace/spring/boot/autoconfigure/SolaceJmsProperties.java) for the most up to date list of directly configurable properties.
+See [`SolaceJmsProperties`](//github.com/SolaceProducts/solace-jms-spring-boot/blob/master/solace-jms-spring-boot-autoconfigure/src/main/java/com/solace/spring/boot/autoconfigure/SolaceJmsProperties.java) for the most up to date list of directly configurable properties.
 
-Any additional Solace JMS API properties can be set through configuring `solace.jms.apiProperties.<Property>` where `<Property>` is the name of the property as defined in the [Solace JMS API documentation for `com.solacesystems.jms.SupportedProperty`](https://docs.solace.com/API-Developer-Online-Ref-Documentation/jms/constant-values.html ), for example:
+Any additional supported Solace JMS API properties can be set through configuring `solace.jms.apiProperties.<Property>` where `<Property>` is the "Value" of the property in the ["com.solacesystems.jms.SupportedProperty" table as defined in the Solace JMS API documentation](//docs.solace.com/API-Developer-Online-Ref-Documentation/jms/constant-values.html#com.solacesystems.jms.SupportedProperty.SOLACE_JMS_SSL_TRUST_STORE ), for example:
 
 ```
-solace.jms.apiProperties.SOLACE_JMS_SSL_TRUST_STORE=ABC
+solace.jms.apiProperties.Solace_JMS_SSL_TrustStore=ABC
 ```
 
 Note that the direct configuration of `solace.jms.` properties takes precedence over the `solace.jms.apiProperties.`.
@@ -178,26 +180,30 @@ logging.level.com.solacesystems=INFO
 
 ## Contributing
 
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on the process for submitting pull requests to us.
 
 ## Authors
 
-See the list of [contributors](https://github.com/SolaceProducts/solace-jms-spring-boot/graphs/contributors) who participated in this project.
+See the list of [contributors](//github.com/SolaceProducts/solace-jms-spring-boot/graphs/contributors) who participated in this project.
 
 ## License
 
 This project is licensed under the Apache License, Version 2.0. - See the [LICENSE](LICENSE) file for details.
 
+## Code of Conduct
+[![Contributor Covenant](//img.shields.io/badge/Contributor%20Covenant-v1.4%20adopted-ff69b4.svg)](CODE_OF_CONDUCT.md)
+Please note that this project is released with a Contributor Code of Conduct. By participating in this project you agree to abide by its terms.
+
 ## Resources
 
 For more information about Spring Boot Auto-Configuration and Starters try these resources:
 
-- [Spring Docs - Spring Boot Auto-Configuration](http://docs.spring.io/autorepo/docs/spring-boot/current/reference/htmlsingle/#using-boot-auto-configuration)
-- [Spring Docs - Developing Auto-Configuration](http://docs.spring.io/autorepo/docs/spring-boot/current/reference/htmlsingle/#boot-features-developing-auto-configuration)
-- [GitHub Tutorial - Master Spring Boot Auto-Configuration](https://github.com/snicoll-demos/spring-boot-master-auto-configuration)
+- [Spring Docs - Spring Boot Auto-Configuration](//docs.spring.io/autorepo/docs/spring-boot/current/reference/htmlsingle/#using-boot-auto-configuration)
+- [Spring Docs - Developing Auto-Configuration](//docs.spring.io/autorepo/docs/spring-boot/current/reference/htmlsingle/#boot-features-developing-auto-configuration)
+- [GitHub Tutorial - Master Spring Boot Auto-Configuration](//github.com/snicoll-demos/spring-boot-master-auto-configuration)
 
 For more information about Solace technology in general please visit these resources:
 
-- The Solace Developer Portal website at: http://dev.solace.com
-- Understanding [Solace technology.](http://dev.solace.com/tech/)
-- Ask the [Solace community](http://dev.solace.com/community/).
+- The Solace Developer Portal website at: //dev.solace.com
+- Understanding [Solace technology.](//dev.solace.com/tech/)
+- Ask the [Solace community](//dev.solace.com/community/).
