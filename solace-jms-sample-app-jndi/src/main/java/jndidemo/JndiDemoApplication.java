@@ -40,7 +40,6 @@ public class JndiDemoApplication {
 		@Value("${solace.jms.demoProducerQueueJndiName}")
 		private String queueJndiName;
 
-		@Override
 		public void run(String... strings) throws Exception {
 			String msg = "Hello World";
 			logger.info("============= Sending " + msg);
