@@ -28,7 +28,7 @@
 		<dependency>
 			<groupId>com.solacesystems</groupId>
 			<artifactId>sol-jms</artifactId>
-			<version>[10,)</version>
+			<version>[10.6,)</version>
 		</dependency>
 	</dependencies>
 </project>
