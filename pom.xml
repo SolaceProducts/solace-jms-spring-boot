@@ -21,7 +21,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.solace.spring.boot</groupId>
 	<artifactId>solace-jms-spring-boot-parent</artifactId>
-	<version>2.3.3-SNAPSHOT</version>
+	<version>2.3.3</version>
 	<packaging>pom</packaging>
 	<name>Solace JMS API Spring Boot Starter and AutoConfiguration</name>
 	<description>Parent POM for Solace JMS API Spring Boot Starter and AutoConfiguration </description>
@@ -47,7 +47,7 @@
 		<url>https://github.com/SolaceProducts/solace-jms-spring-boot.git</url>
 		<connection>scm:git:git://github.com/SolaceProducts/solace-jms-spring-boot.git</connection>
 		<developerConnection>scm:git:git@github.com:SolaceProducts/solace-jms-spring-boot.git</developerConnection>
-		<tag>HEAD</tag>
+		<tag>2.3.3</tag>
 	</scm>
 
 	<properties>
