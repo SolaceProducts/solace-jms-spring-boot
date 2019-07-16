@@ -56,11 +56,10 @@ public class SolaceJmsAutoCloudConfigurationTest<T> extends SolaceJmsAutoConfigu
 
     @Parameter(0) public String beanClassName;
     @Parameter(1) public Class<T> beanClass;
-	CloudCondition cloudCondition = new CloudCondition();
 
-	public SolaceJmsAutoCloudConfigurationTest() {
-		super(SolaceJmsAutoCloudConfiguration.class);
-	}
+    public SolaceJmsAutoCloudConfigurationTest() {
+        super(SolaceJmsAutoCloudConfiguration.class);
+    }
 
     @Parameters(name = "{0}")
     public static Collection<Object[]> parameterData() {

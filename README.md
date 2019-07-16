@@ -54,12 +54,12 @@ The releases from this project are hosted in [Maven Central](//mvnrepository.com
 The easiest way to get started is to include the `solace-jms-spring-boot-starter` in your application. For an example see the [JMS Sample App](//github.com/SolaceProducts/solace-jms-spring-boot/tree/master/solace-jms-sample-app) in this project.
 
 Here is how to include the latest spring boot starter in your project using Gradle and Maven. You can also add a specific version from [Maven Central](//mvnrepository.com/artifact/com.solace.spring.boot/solace-jms-spring-boot-starter ).
-Note that you'll neeed to include version 3 or later to use Spring Boot release 2.x.
+Note that you'll neeed to include version 3.0.0 or later to use Spring Boot release 2.x.
 
 #### Using it with Gradle
 
 ```groovy
-compile("com.solace.spring.boot:solace-jms-spring-boot-starter:3.+")
+compile("com.solace.spring.boot:solace-jms-spring-boot-starter:3.0.0")
 ```
 
 #### Using it with Maven
@@ -68,7 +68,7 @@ compile("com.solace.spring.boot:solace-jms-spring-boot-starter:3.+")
 <dependency>
 	<groupId>com.solace.spring.boot</groupId>
 	<artifactId>solace-jms-spring-boot-starter</artifactId>
-	<version>[3,)</version>
+	<version>3.0.0</version>
 </dependency>
 ```
 
@@ -101,7 +101,7 @@ For example:
 <dependency>
 	<groupId>com.solace.cloud.cloudfoundry</groupId>
 	<artifactId>solace-spring-cloud-connector</artifactId>
-	<version>[4,)</version>
+	<version>4.0.0</version>
 </dependency>
 ```
 
