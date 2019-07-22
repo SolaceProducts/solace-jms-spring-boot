@@ -1,4 +1,4 @@
-[![Build Status](//travis-ci.org/SolaceProducts/solace-jms-spring-boot.svg?branch=master)](//travis-ci.org/SolaceProducts/solace-jms-spring-boot)
+[![Build Status](https://travis-ci.org/SolaceProducts/solace-jms-spring-boot.svg?branch=master)](https://travis-ci.org/SolaceProducts/solace-jms-spring-boot)
 
 # Spring Boot Auto-Configuration for the Solace JMS
 
@@ -191,7 +191,7 @@ See the list of [contributors](//github.com/SolaceProducts/solace-jms-spring-boo
 This project is licensed under the Apache License, Version 2.0. - See the [LICENSE](LICENSE) file for details.
 
 ## Code of Conduct
-[![Contributor Covenant](//img.shields.io/badge/Contributor%20Covenant-v1.4%20adopted-ff69b4.svg)](CODE_OF_CONDUCT.md)
+[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v1.4%20adopted-ff69b4.svg)](CODE_OF_CONDUCT.md)
 Please note that this project is released with a Contributor Code of Conduct. By participating in this project you agree to abide by its terms.
 
 ## Resources
