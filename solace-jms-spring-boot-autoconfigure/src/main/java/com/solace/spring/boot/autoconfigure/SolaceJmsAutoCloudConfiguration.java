@@ -24,7 +24,6 @@ import com.solace.services.core.model.SolaceServiceCredentials;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -39,15 +38,15 @@ import org.springframework.context.annotation.Configuration;
 import com.solace.spring.cloud.core.SolaceMessagingInfo;
 import com.solacesystems.jms.SolConnectionFactory;
 import org.springframework.context.annotation.Primary;
+import org.springframework.jndi.JndiTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Configuration
 @AutoConfigureBefore(JmsAutoConfiguration.class)
-@AutoConfigureAfter(SolaceJndiAutoCloudConfiguration.class)
 @ConditionalOnClass({ ConnectionFactory.class, SolConnectionFactory.class, CloudFactory.class })
-@ConditionalOnMissingBean(ConnectionFactory.class)
+@ConditionalOnMissingBean({ ConnectionFactory.class, JndiTemplate.class })
 @Conditional(CloudCondition.class)
 @EnableConfigurationProperties(SolaceJmsProperties.class)
 public class SolaceJmsAutoCloudConfiguration extends SolaceJmsAutoConfigurationBase {

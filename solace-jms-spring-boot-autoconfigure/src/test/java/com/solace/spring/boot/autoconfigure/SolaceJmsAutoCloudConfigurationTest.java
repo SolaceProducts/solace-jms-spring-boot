@@ -56,11 +56,10 @@ public class SolaceJmsAutoCloudConfigurationTest<T> extends SolaceJmsAutoConfigu
 
     @Parameter(0) public String beanClassName;
     @Parameter(1) public Class<T> beanClass;
-	CloudCondition cloudCondition = new CloudCondition();
 
-	public SolaceJmsAutoCloudConfigurationTest() {
-		super(SolaceJmsAutoCloudConfiguration.class);
-	}
+    public SolaceJmsAutoCloudConfigurationTest() {
+        super(SolaceJmsAutoCloudConfiguration.class);
+    }
 
     @Parameters(name = "{0}")
     public static Collection<Object[]> parameterData() {
@@ -157,14 +156,14 @@ public class SolaceJmsAutoCloudConfigurationTest<T> extends SolaceJmsAutoConfigu
 		assertNotNull(bean);
 
 		if (beanClass.equals(SpringSolJmsConnectionFactoryCloudFactory.class)) {
-            SpringSolJmsConnectionFactoryCloudFactory springSolConnectionFactoryCloudFactory =
-                    (SpringSolJmsConnectionFactoryCloudFactory) bean;
-            assertNotNull(springSolConnectionFactoryCloudFactory.getSolConnectionFactory());
-            List<SolaceServiceCredentials> availableServices = springSolConnectionFactoryCloudFactory
-                    .getSolaceServiceCredentials();
-            assertNotNull(availableServices);
-            assertEquals(1,availableServices.size());
-        }
+                    SpringSolJmsConnectionFactoryCloudFactory springSolConnectionFactoryCloudFactory =
+                            (SpringSolJmsConnectionFactoryCloudFactory) bean;
+                    assertNotNull(springSolConnectionFactoryCloudFactory.getSolConnectionFactory());
+                    List<SolaceServiceCredentials> availableServices = springSolConnectionFactoryCloudFactory
+                            .getSolaceServiceCredentials();
+                    assertNotNull(availableServices);
+                    assertEquals(1,availableServices.size());
+                }
 	}
 
 	@Test
@@ -195,7 +194,42 @@ public class SolaceJmsAutoCloudConfigurationTest<T> extends SolaceJmsAutoConfigu
 
 	}
 
-	@Test
+        @Test
+        public void isCloudConfiguredByUserProvidedServices() {
+
+                makeCloudEnv();
+
+                String JSONString = addOneUserProvidedSolaceService("VCAP_SERVICES");
+                String CF_VCAP_SERVICES = "VCAP_SERVICES={ \"user-provided\": [" + JSONString + "] }";
+
+                load(CF_CLOUD_APP_ENV, CF_VCAP_SERVICES);
+
+                Environment env = context.getEnvironment();
+
+                String VCAP_APPLICATION = env.getProperty("VCAP_APPLICATION");
+                assertNotNull(VCAP_APPLICATION);
+                assertEquals("{}", VCAP_APPLICATION);
+
+                String VCAP_SERVICES = env.getProperty("VCAP_SERVICES");
+                assertNotNull(VCAP_SERVICES);
+                assertTrue(VCAP_SERVICES.contains("solace-pubsub"));
+
+                validateBackwardsCompatibility();
+
+                T bean = this.context.getBean(beanClass);
+                assertNotNull(bean);
+
+                if (beanClass.equals(SpringSolJmsConnectionFactoryCloudFactory.class)) {
+                    SpringSolJmsConnectionFactoryCloudFactory springSolConnectionFactoryCloudFactory = (SpringSolJmsConnectionFactoryCloudFactory) bean;
+                    assertNotNull(springSolConnectionFactoryCloudFactory.getSolConnectionFactory());
+                    List<SolaceServiceCredentials> availableServices = springSolConnectionFactoryCloudFactory
+                            .getSolaceServiceCredentials();
+                    assertNotNull(availableServices);
+                    assertEquals(1, availableServices.size());
+                }
+        }
+
+        @Test
 	public void isCloudConfiguredBySolaceMessagingInfoAndOtherProperties() {
 		makeCloudEnv();
 
